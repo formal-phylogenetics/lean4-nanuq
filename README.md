@@ -49,7 +49,7 @@ lake env lean -DautoImplicit=false -DmaxSynthPendingDepth=3 scripts/Audit.lean  
 python3 scripts/route_check.py check docs/paper_routes.tsv --accept docs/route_differences.tsv
 ```
 
-Lean and Mathlib `v4.36.0-rc1` ([`lean-toolchain`](lean-toolchain), [`lake-manifest.json`](lake-manifest.json)).
+Lean and Mathlib `v4.37.0-rc1` ([`lean-toolchain`](lean-toolchain), [`lake-manifest.json`](lake-manifest.json)).
 
 ## Credits
 

@@ -126,7 +126,7 @@ theorem stepOf_eq_cherryMass (hN : N.IsPhylogenetic) (hθ : N.IsNormalized θ) (
   have htop : ∀ f, N.graph.target f ∈ D → top f = ∅ := by
     intro f hf
     by_contra hne
-    obtain ⟨A, hA⟩ := nonempty_iff_ne_empty.2 hne
+    obtain ⟨A, hA⟩ := ne_empty_iff_nonempty.symm.2 hne
     obtain ⟨x, hx⟩ := (hFr.good_top f hf).1.1 A hA
     obtain ⟨y, hy, hxy⟩ := hFr.below f hf x (mem_lineages.2 ⟨A, hA, hx⟩)
     obtain ⟨hf₁, hf₂⟩ := (hmemD _).1 hf
@@ -511,7 +511,7 @@ private theorem split_value (hθ : N₃.IsMetric θ) (hρ : 0 ≤ ρ ∧ ρ ≤ 
     exact subset_univ _
   have hiff : C' ∈ r.val ↔ C ∈ r.val := by
     refine ⟨mem_val_compl r ?_, mem_val_compl r hCC⟩
-    rw [← hCC, sdiff_sdiff_right_self, inf_eq_inter, univ_inter]
+    rw [← hCC, sdiff_sdiff_right_self, univ_inter]
   rw [hS, rootMass_singletons hN hθ hρ (q := univ) rfl (by rw [mem_treesOn, taxa_eq_univ]),
     rootMass_of_mem hN hθ hρ hg₁ (C := C) (mem_union_left _ (mem_insert_self _ _)) hC2 (htaxa _),
     rootMass_of_mem hN hθ hρ hg₂ (C := C') (mem_union_right _ (mem_insert_self _ _)) hC'2 (htaxa _),
