@@ -2,7 +2,7 @@ name = "Nanuq"
 version = "0.1.0"
 keywords = ["math", "phylogenetics"]
 description = "A Lean 4 formalization of NANUQ (Allman, Baños, Rhodes 2019)"
-defaultTargets = ["Nanuq"]
+defaultTargets = ["Nanuq", "Palomar"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -38,7 +38,22 @@ name = "mathlib"
 scope = "leanprover-community"
 rev = "v4.37.0-rc1"
 
-# Every module of this repository is under Nanuq/ (lean4-phylogenetics, docs/CONVENTIONS.md).
+# Every module of the project is in Nanuq/, but its Challenge and its Solution, which are in
+# palomar/ (lean4-phylogenetics, docs/CONVENTIONS.md, Sections 2 and 3). Lake fails on a glob whose
+# directory, or a root whose file, does not exist.
+
+# The paper's library, in the namespace Nanuq: general mathematics in Nanuq/Basic/, the results
+# the paper cites in Nanuq/External/, the definitions of the Challenge in Nanuq/Defs.lean, and the
+# paper's sections.
 [[lean_lib]]
 name = "Nanuq"
 globs = ["Nanuq.+"]
+
+# The paper's Challenge and Solution, the modules Nanuq.Challenge and Nanuq.Solution of the source
+# directory palomar/ (Comparator: palomar/Nanuq/comparator.json). Declared last: Lake gives a module
+# to the last library whose patterns match it, and the glob above matches these names when the
+# paper's name is the root.
+[[lean_lib]]
+name = "Palomar"
+srcDir = "palomar"
+roots = ["Nanuq.Challenge", "Nanuq.Solution"]

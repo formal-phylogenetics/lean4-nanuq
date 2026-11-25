@@ -1,0 +1,15 @@
+{
+  "challenge_module": "Nanuq.Challenge",
+  "solution_module": "Nanuq.Solution",
+  "theorem_names": [
+    "NanuqChallenge.theorem36",
+    "NanuqChallenge.theorem36_generic"
+  ],
+  "definition_names": [],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}
