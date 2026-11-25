@@ -1,6 +1,6 @@
 module
 
-public import TreeOfBlobs.NMSCChain
+public import PhyloNetwork.NMSCChain
 public import Nanuq.Proposition9
 
 /-!
@@ -136,10 +136,10 @@ theorem stepOf_eq_cherryMass (hN : N.IsPhylogenetic) (hθ : N.IsNormalized θ) (
       · exact hf₁ h'.symm
       · have := hu g hg₂
         rw [this, hs] at hg₁
-        exact hf₂ (TOBQMC.Level1.eq_root_of_reaches_root hN (hg₁ ▸ hc))
+        exact hf₂ (PhyloNetwork.Level1.eq_root_of_reaches_root hN (hg₁ ▸ hc))
     · by_cases hyr : y = N.root
       · subst hyr
-        exact hf₂ (TOBQMC.Level1.eq_root_of_reaches_root hN hy)
+        exact hf₂ (PhyloNetwork.Level1.eq_root_of_reaches_root hN hy)
       · rw [twoInj_other hyu hyr] at hxy
         simp at hxy
   have harr : arriving N (twoInj N u F G) top u = F := by
@@ -862,7 +862,7 @@ theorem reaches_h {y : V₃} (h : N₃.graph.Reaches .h y) : y = .h ∨ y = .w �
     rcases ih with rfl | rfl | rfl | rfl <;> cases e <;> first | decide | exact absurd he₁ (by decide)
 
 /-- A walk outside the blob from the leaf `c` stays there. -/
-theorem blockWalk_c {z : V₃} (h : TOBQMC.Level1.BlockWalk N₃ .h .c z) : z = .c := by
+theorem blockWalk_c {z : V₃} (h : PhyloNetwork.Level1.BlockWalk N₃ .h .c z) : z = .c := by
   induction h with
   | refl => rfl
   | tail _ hstep ih =>
@@ -875,7 +875,7 @@ theorem blockWalk_c {z : V₃} (h : TOBQMC.Level1.BlockWalk N₃ .h .c z) : z = 
         | exact absurd (he₁ ▸ sameBlob_h_u) hz
 
 /-- A walk outside the blob from the leaf `d` stays there. -/
-theorem blockWalk_d {z : V₃} (h : TOBQMC.Level1.BlockWalk N₃ .h .d z) : z = .d := by
+theorem blockWalk_d {z : V₃} (h : PhyloNetwork.Level1.BlockWalk N₃ .h .d z) : z = .d := by
   induction h with
   | refl => rfl
   | tail _ hstep ih =>
@@ -1058,7 +1058,7 @@ theorem threeTwoTreelike_metric₃ : ThreeTwoTreelike N₃ (nmscCF N₃ metric�
   exact ⟨s, hs, fun r _ => ((centroid_N₃ r).trans (centroid_N₃ s).symm).le,
     fun r _ r' _ => (centroid_N₃ r).trans (centroid_N₃ r').symm⟩
 
-theorem not_noCentroidCF_metric₃ : ¬ TINNiK.NoCentroidCF (nmscCF N₃ metric₃ 0) :=
+theorem not_noCentroidCF_metric₃ : ¬ Tinnik.NoCentroidCF (nmscCF N₃ metric₃ 0) :=
   fun h => h univ (by decide) fun r _ => centroid_N₃ r
 
 theorem isTreelike_N₃ {q : Finset (Fin 4)} (hq : #q = 4) : IsTreelike N₃ q := by
@@ -1076,7 +1076,7 @@ theorem networkClass_N₃ : networkClass N₃ univ = .tree abcd := by
   unfold networkClass
   rw [dite_eq_left hex]
   congr 1
-  exact AllmanEtAl2023.inducedCutSplit_unique isPhylogenetic_N₃ hex.choose_spec.2 inducedCutSplit_N₃
+  exact Allman2023.inducedCutSplit_unique isPhylogenetic_N₃ hex.choose_spec.2 inducedCutSplit_N₃
     ((taxa_eq_univ _).trans (taxa_eq_univ _).symm)
 
 theorem cfClass_metric₃ : cfClass (nmscCF N₃ metric₃ 0) univ = .star :=

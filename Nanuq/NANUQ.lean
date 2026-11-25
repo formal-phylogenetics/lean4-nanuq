@@ -1,8 +1,8 @@
 module
 
-public import TreeOfBlobs.External.Rhodes2020.Theorem2
-public import TINNiK.T3
-public import TreeOfBlobs.Level1CF
+public import PhyloNetwork.External.Rhodes2020.Theorem2
+public import Tinnik.Consistency.T3
+public import PhyloNetwork.Level1CF
 
 /-!
 # NANUQ (Allman, Baños, Rhodes 2019)
@@ -32,7 +32,7 @@ plain text), and compared with the published text on the passages quoted.
   proof shows; `theorem36_output_of_proposition9`, `theorem36_generic_of_proposition9`. `Proposition9.lean` proves
   Proposition 9 on binary level-1 networks, and there these are `theorem36`, `theorem36_output`, `theorem36_generic`.
 * Their hypotheses: `ThreeTwoTreelike`, as printed; `Proposition9`, what is used of the source's Proposition 9; and
-  `TINNiK.NoCentroidCF`, a correction.
+  `Tinnik.NoCentroidCF`, a correction.
 * The population values: `cfClass`, the class given by the concordance factors; `networkClass`, the class given by the
   network, `networkDistance`, the theoretical distance of Definition 22, and `cfClass_eq_networkClass`.
 
@@ -91,7 +91,7 @@ the topology of largest count. "With level `β` chosen for the test, we reject t
 smaller than `β`" (line 1854); "we interpret a p-value greater than `α` as support for a tree [...]. A p-value less
 than `α` is interpreted as support for a 4-cycle network" (lines 1901-1906); when the first fails to reject and the
 second rejects, "We choose to prioritize the first test" (line 1916). A p-value equal to the level is not treated in
-the source. Here it does not reject, as in `TINNiK.testedBT3`. -/
+the source. Here it does not reject, as in `Tinnik.testedBT3`. -/
 def classify (mlT mlC : (QuartetTree X → ℝ) → Finset X → QuartetTree X) (α β : ℝ) (c : QuartetTree X → ℝ)
     (q : Finset X) : QuartetClass X :=
   if β ≤ starPValue .lrt c q then .star
@@ -570,7 +570,7 @@ theorem tendsto_classify_eq_cfClass_at (hd : IsDist dist) (hs : QuartetTests.Dis
     (hpos : ∀ r, 0 < displayCF dist sides r) {α β : ℕ → ℝ} (hα₀ : Tendsto α atTop (𝓝 0))
     (hrej : RejectsOffNull dist sides α) (hβ : ∀ n, 0 < β n)
     (hβlog : Tendsto (fun n : ℕ => Real.log (β n) / n) atTop (𝓝 0))
-    (hcen : TINNiK.NoCentroidCF (displayCF dist sides) ∨ Tendsto β atTop (𝓝 0))
+    (hcen : Tinnik.NoCentroidCF (displayCF dist sides) ∨ Tendsto β atTop (𝓝 0))
     {mlT mlC : (QuartetTree X → ℝ) → Finset X → QuartetTree X} (hmlT : IsMaxCountSelection mlT)
     (hmlC : IsMinCountSelection mlC) {q : Finset X} (hq : q.card = 4) :
     Tendsto (fun n => iidProb dist n fun ω =>
@@ -619,7 +619,7 @@ theorem tendsto_classify_eq_cfClass (hd : IsDist dist) (hs : QuartetTests.Displa
     (hpos : ∀ r, 0 < displayCF dist sides r) {α β : ℕ → ℝ} (hα₀ : Tendsto α atTop (𝓝 0))
     (hrej : RejectsOffNull dist sides α) (hβ : ∀ n, 0 < β n)
     (hβlog : Tendsto (fun n : ℕ => Real.log (β n) / n) atTop (𝓝 0))
-    (hcen : TINNiK.NoCentroidCF (displayCF dist sides) ∨ Tendsto β atTop (𝓝 0))
+    (hcen : Tinnik.NoCentroidCF (displayCF dist sides) ∨ Tendsto β atTop (𝓝 0))
     {mlT mlC : (QuartetTree X → ℝ) → Finset X → QuartetTree X} (hmlT : IsMaxCountSelection mlT)
     (hmlC : IsMinCountSelection mlC) :
     Tendsto (fun n => iidProb dist n fun ω => ∀ q : Finset X, q.card = 4 →
@@ -655,7 +655,7 @@ theorem tendsto_t3PValue_lt_level (hd : IsDist dist) (hs : QuartetTests.Displays
 Departure from the paper: the source takes "`α_m` to be the minimum of the `α'_m`" over the non-tree-like sets of four
 taxa (line 2207). That is an error: a level rejects when the p-value is below it, so rejecting on all those sets needs
 a level at least each `α'_m`, and at the minimum the test may not reject (`not_rejects_at_minimum`). Here `α_m` is the
-maximum, with `P(χ²₂ > m)` added so that the maximum is over a nonempty set. This is how `TINNiK.exists_levels_t3`
+maximum, with `P(χ²₂ > m)` added so that the maximum is over a nonempty set. This is how `Tinnik.exists_levels_t3`
 chooses. It tends to zero like the minimum, and everything else in the proof stands. -/
 theorem exists_levels (hd : IsDist dist) (hs : QuartetTests.DisplaysOne dist sides) :
     ∃ α : ℕ → ℝ, Tendsto α atTop (𝓝 0) ∧ (∀ m, 0 < α m) ∧ (∀ m, 1 ≤ m → α m < 1) ∧
@@ -681,8 +681,8 @@ theorem exists_levels (hd : IsDist dist) (hs : QuartetTests.DisplaysOne dist sid
   refine ⟨α, ?_, fun m => (hpos _).trans_le (hbase m), fun m hm => ?_, ?_⟩
   · have hsum : Tendsto (fun m : ℕ => chiSqTwoTail (m * 1) + ∑ q ∈ Q, chiSqTwoTail (m * (t3Stat p q / 2)))
         atTop (𝓝 0) := by
-      have := (TINNiK.tendsto_chiSqTwoTail_mul (d := 1) one_pos).add
-        (tendsto_finsetSum Q fun q hq => TINNiK.tendsto_chiSqTwoTail_mul (hQ q hq))
+      have := (Tinnik.tendsto_chiSqTwoTail_mul (d := 1) one_pos).add
+        (tendsto_finsetSum Q fun q hq => Tinnik.tendsto_chiSqTwoTail_mul (hQ q hq))
       simpa using this
     refine squeeze_zero (fun m => (hpos _).le.trans (hbase m)) (fun m => ?_) hsum
     refine (Finset.fold_max_le _).mpr ⟨?_, fun q hq => ?_⟩
@@ -1170,7 +1170,7 @@ def GroveDisplays (N : RootedNetwork V E X) (s : QuartetTree X) : Prop :=
     ∃ e, N.SplitOffAt D e s
 
 /-- The network's induced 4-taxon network on `q` has a `3₂`-cycle: a reticulation with exactly two taxa of `q` below
-it, the other two being in different blocks at its blob (TOB-QMC's blocks, `TOBQMC.Level1.BlockWalk`), so that the
+it, the other two being in different blocks at its blob (TOB-QMC's blocks, `PhyloNetwork.Level1.BlockWalk`), so that the
 three parts of `q` meet the cycle at three vertices.
 
 The source's definition is by the cycles of the quartet network of its Definition 5. On a binary level-1 network the two
@@ -1178,7 +1178,7 @@ agree: `Quartet.hasThreeTwoCycle_iff`, in `Quartet.lean`. -/
 def HasThreeTwoCycle (N : RootedNetwork V E X) (q : Finset X) : Prop :=
   ∃ h : V, 2 ≤ N.graph.indegree h ∧ (q.filter fun x => N.graph.Reaches h (N.leaf x)).card = 2 ∧
     ∀ x ∈ q, ∀ y ∈ q, x ≠ y → ¬ N.graph.Reaches h (N.leaf x) → ¬ N.graph.Reaches h (N.leaf y) →
-      ¬ TOBQMC.Level1.BlockWalk N h (N.leaf x) (N.leaf y)
+      ¬ PhyloNetwork.Level1.BlockWalk N h (N.leaf x) (N.leaf y)
 
 /-- The hypothesis of Theorem 36 (line 2003), as printed: "all induced quartet networks with `3₂`-cycles are
 tree-like", tree-like being Definition 8 (line 409), "the two smallest entries of the concordance factor are equal":
@@ -1192,7 +1192,7 @@ The parts:
 
 * `no_three_two`: part 1. If `Q` has no `4₁`-cycle or `3₂`-cycle, its concordance factor supports `Q̃`, for a split
   that the tree of blobs displays; for one it does not display, this is proved,
-  `TOBQMC.Level1.nmscCF_lt_of_not_displays`, and the equality of the alternatives is proved for all networks,
+  `PhyloNetwork.Level1.nmscCF_lt_of_not_displays`, and the equality of the alternatives is proved for all networks,
   `NMSC.cut_alternatives`;
 * `cycle_exists`, `cycle_min`: part 3. A set of four taxa with no cut-edge split on its induced network has a 4-cycle,
   with circular order `a, b, c, d` say. The grove displays `ab|cd` and `ad|bc`, not `ac|bd` (Figure 6), and `CF_AB|CD
@@ -1252,11 +1252,11 @@ theorem isDist_geneTreeDist [Nonempty X] {N : RootedNetwork V E X} (hN : N.IsPhy
 
 /-- **On a cut-edge split, the concordance factor is strictly on its half-line**, under the hypothesis of Theorem 36
 and Proposition 9, off the centroid. A split the tree of blobs does not display needs neither:
-`TOBQMC.Level1.nmscCF_lt_of_not_displays`. -/
+`PhyloNetwork.Level1.nmscCF_lt_of_not_displays`. -/
 theorem isT1Strict_of_inducedCutSplit [Nonempty X] {N : RootedNetwork V E X} (hN : N.IsPhylogenetic)
     (hLevel : IsLevelOne N) {θ : MetricData E} (hθ : N.IsMetric θ) {ρ : ℝ} (hρ : 0 ≤ ρ ∧ ρ ≤ 1)
     (hP9 : Proposition9 N (nmscCF N θ ρ)) (h32 : ThreeTwoTreelike N (nmscCF N θ ρ))
-    (hcen : TINNiK.NoCentroidCF (nmscCF N θ ρ)) {s : QuartetTree X} (hs : InducedCutSplit N s) :
+    (hcen : Tinnik.NoCentroidCF (nmscCF N θ ρ)) {s : QuartetTree X} (hs : InducedCutSplit N s) :
     IsT1Strict (nmscCF N θ ρ) s := by
   have halt := NMSC.cut_alternatives hN hθ hρ s hs
   refine ⟨fun r hr => ?_, halt⟩
@@ -1264,7 +1264,7 @@ theorem isT1Strict_of_inducedCutSplit [Nonempty X] {N : RootedNetwork V E X} (hN
   · by_cases h3 : HasThreeTwoCycle N s.taxa
     · have hq := s.card_taxa
       have hsum : ∑ r ∈ treesOn s.taxa, nmscCF N θ ρ r = 1 :=
-        QuartetTests.sum_displayCF_treesOn (isDist_geneTreeDist hN hθ hρ) (TINNiK.displaysOne_nmsc hN) hq
+        QuartetTests.sum_displayCF_treesOn (isDist_geneTreeDist hN hθ hρ) (Tinnik.displaysOne_nmsc hN) hq
       rcases cf_trichotomy hq hsum with huni | ⟨s', hs', hstrict⟩ | ⟨hnull, -⟩
       · exact absurd huni (hcen _ hq)
       · have hst : s'.taxa = s.taxa := mem_treesOn.1 hs'
@@ -1285,13 +1285,13 @@ theorem isT1Strict_of_inducedCutSplit [Nonempty X] {N : RootedNetwork V E X} (hN
           · exact key r₁ hmem₁ h'
       · exact absurd (h32 _ hq h3) hnull
     · exact hP9.no_three_two s hd h3 r hr
-  · exact TOBQMC.Level1.nmscCF_lt_of_not_displays hN hLevel hθ hρ hs hd hr
+  · exact PhyloNetwork.Level1.nmscCF_lt_of_not_displays hN hLevel hθ hρ hs hd hr
 
-/-- The hypotheses give what the T3 test needs, in `src/TINNiK/T3.lean`. So they also give the T3 option of TINNiK. -/
+/-- The hypotheses give what the T3 test needs, in `src/TINNiK/T3.lean`. So they also give the T3 option of Tinnik. -/
 theorem t3Detectable_of_proposition9 [Nonempty X] {N : RootedNetwork V E X} (hN : N.IsPhylogenetic)
     (hLevel : IsLevelOne N) {θ : MetricData E} (hθ : N.IsMetric θ) {ρ : ℝ} (hρ : 0 ≤ ρ ∧ ρ ≤ 1)
     (hP9 : Proposition9 N (nmscCF N θ ρ)) (h32 : ThreeTwoTreelike N (nmscCF N θ ρ))
-    (hcen : TINNiK.NoCentroidCF (nmscCF N θ ρ)) : TINNiK.T3Detectable N (nmscCF N θ ρ) := by
+    (hcen : Tinnik.NoCentroidCF (nmscCF N θ ρ)) : Tinnik.T3Detectable N (nmscCF N θ ρ) := by
   refine ⟨fun s hs => isT1Strict_of_inducedCutSplit hN hLevel hθ hρ hP9 h32 hcen hs, fun q hq hnt hnull => ?_⟩
   obtain ⟨s, hs, hn, -⟩ := hP9.cycle_exists q hq hnt
   have hst : s.taxa = q := mem_treesOn.1 hs
@@ -1316,7 +1316,7 @@ theorem t3Detectable_of_proposition9 [Nonempty X] {N : RootedNetwork V E X} (hN 
 theorem cfClass_eq_networkClass [Nonempty X] {N : RootedNetwork V E X} (hN : N.IsPhylogenetic)
     (hLevel : IsLevelOne N) {θ : MetricData E} (hθ : N.IsMetric θ) {ρ : ℝ} (hρ : 0 ≤ ρ ∧ ρ ≤ 1)
     (hP9 : Proposition9 N (nmscCF N θ ρ)) (h32 : ThreeTwoTreelike N (nmscCF N θ ρ))
-    (hcen : TINNiK.NoCentroidCF (nmscCF N θ ρ)) {q : Finset X} (hq : q.card = 4) :
+    (hcen : Tinnik.NoCentroidCF (nmscCF N θ ρ)) {q : Finset X} (hq : q.card = 4) :
     cfClass (nmscCF N θ ρ) q = networkClass N q := by
   unfold networkClass
   by_cases h : ∃ s ∈ treesOn q, InducedCutSplit N s
@@ -1338,7 +1338,7 @@ distance of Step 3 is the theoretical one. For a level sequence `β` with `log(1
 theorem tendsto_classify_eq_networkClass [Nonempty X] {N : RootedNetwork V E X} (hN : N.IsPhylogenetic)
     (hLevel : IsLevelOne N) {θ : MetricData E} (hθ : N.IsMetric θ) {ρ : ℝ} (hρ : 0 ≤ ρ ∧ ρ ≤ 1)
     (hP9 : Proposition9 N (nmscCF N θ ρ)) (h32 : ThreeTwoTreelike N (nmscCF N θ ρ))
-    (hcen : TINNiK.NoCentroidCF (nmscCF N θ ρ)) {α β : ℕ → ℝ} (hα₀ : Tendsto α atTop (𝓝 0))
+    (hcen : Tinnik.NoCentroidCF (nmscCF N θ ρ)) {α β : ℕ → ℝ} (hα₀ : Tendsto α atTop (𝓝 0))
     (hrej : RejectsOffNull (geneTreeDist N θ ρ) unroot α) (hβ : ∀ n, 0 < β n)
     (hβlog : Tendsto (fun n : ℕ => Real.log (β n) / n) atTop (𝓝 0))
     {mlT mlC : (QuartetTree X → ℝ) → Finset X → QuartetTree X} (hmlT : IsMaxCountSelection mlT)
@@ -1348,7 +1348,7 @@ theorem tendsto_classify_eq_networkClass [Nonempty X] {N : RootedNetwork V E X} 
         nanuqDistance (classify mlT mlC (α n) (β n) (quartetCount unroot ω)) = networkDistance N) atTop (𝓝 1) := by
   have hd := isDist_geneTreeDist hN hθ hρ
   refine tendsto_iidProb_of_imp hd (Eventually.of_forall fun n ω hω => ?_)
-    (tendsto_classify_eq_cfClass hd (TINNiK.displaysOne_nmsc hN) (fun r => nmscCF_pos hN hθ hρ r) hα₀ hrej hβ hβlog
+    (tendsto_classify_eq_cfClass hd (Tinnik.displaysOne_nmsc hN) (fun r => nmscCF_pos hN hθ hρ r) hα₀ hrej hβ hβlog
       (Or.inl hcen) hmlT hmlC)
   have hall : ∀ q : Finset X, q.card = 4 →
       classify mlT mlC (α n) (β n) (quartetCount unroot ω) q = networkClass N q := fun q hq =>
@@ -1360,7 +1360,7 @@ at `theorem36`, in `Proposition9.lean`, which gives `hP9` on a binary level-1 ne
 used only through Proposition 9, so it is not a hypothesis here. -/
 theorem theorem36_of_proposition9 [Nonempty X] {N : RootedNetwork V E X} (hN : N.IsPhylogenetic)
     (hLevel : IsLevelOne N) {θ : MetricData E} (hθ : N.IsMetric θ) (hP9 : Proposition9 N (nmscCF N θ 0))
-    (h32 : ThreeTwoTreelike N (nmscCF N θ 0)) (hcen : TINNiK.NoCentroidCF (nmscCF N θ 0)) :
+    (h32 : ThreeTwoTreelike N (nmscCF N θ 0)) (hcen : Tinnik.NoCentroidCF (nmscCF N θ 0)) :
     ∃ α : ℕ → ℝ, (∀ m, 0 < α m) ∧ (∀ m, 1 ≤ m → α m < 1) ∧ Tendsto α atTop (𝓝 0) ∧
       ∀ β : ℝ, 0 < β → β < 1 → ∀ mlT mlC : (QuartetTree X → ℝ) → Finset X → QuartetTree X,
         IsMaxCountSelection mlT → IsMinCountSelection mlC →
@@ -1370,7 +1370,7 @@ theorem theorem36_of_proposition9 [Nonempty X] {N : RootedNetwork V E X} (hN : N
           atTop (𝓝 1) := by
   have hρ : (0 : ℝ) ≤ 0 ∧ (0 : ℝ) ≤ 1 := ⟨le_rfl, zero_le_one⟩
   obtain ⟨α, hα₀, hαpos, hαlt, hrej⟩ :=
-    exists_levels (isDist_geneTreeDist hN hθ hρ) (TINNiK.displaysOne_nmsc (θ := θ) (ρ := 0) hN)
+    exists_levels (isDist_geneTreeDist hN hθ hρ) (Tinnik.displaysOne_nmsc (θ := θ) (ρ := 0) hN)
   refine ⟨α, hαpos, hαlt, hα₀, fun β hβ _ mlT mlC hmlT hmlC => ?_⟩
   exact tendsto_classify_eq_networkClass hN hLevel hθ hρ hP9 h32 hcen hα₀ hrej (β := fun _ => β)
     (fun _ => hβ) (tendsto_log_const_div β) hmlT hmlC
@@ -1378,7 +1378,7 @@ theorem theorem36_of_proposition9 [Nonempty X] {N : RootedNetwork V E X} (hN : N
 /-- `theorem36_output`, with what it uses of Proposition 9. -/
 theorem theorem36_output_of_proposition9 [Nonempty X] {N : RootedNetwork V E X} (hN : N.IsPhylogenetic)
     (hLevel : IsLevelOne N) {θ : MetricData E} (hθ : N.IsMetric θ) (hP9 : Proposition9 N (nmscCF N θ 0))
-    (h32 : ThreeTwoTreelike N (nmscCF N θ 0)) (hcen : TINNiK.NoCentroidCF (nmscCF N θ 0)) :
+    (h32 : ThreeTwoTreelike N (nmscCF N θ 0)) (hcen : Tinnik.NoCentroidCF (nmscCF N θ 0)) :
     ∃ α : ℕ → ℝ, (∀ m, 0 < α m) ∧ (∀ m, 1 ≤ m → α m < 1) ∧ Tendsto α atTop (𝓝 0) ∧
       ∀ β : ℝ, 0 < β → β < 1 → ∀ mlT mlC : (QuartetTree X → ℝ) → Finset X → QuartetTree X,
         IsMaxCountSelection mlT → IsMinCountSelection mlC →
@@ -1403,8 +1403,8 @@ theorem theorem36_generic_of_proposition9 [Nonempty X] {N : RootedNetwork V E X}
           Tendsto (fun m => iidProb (geneTreeDist N θ 0) m fun ω =>
             nanuqDistance (classify mlT mlC (α m) β (quartetCount unroot ω)) = networkDistance N)
             atTop (𝓝 1) := by
-  refine ⟨_, TINNiK.isGenericNull_centroid hN hBin, fun θ hθ hA hP9 h32 => ?_⟩
-  have hcen : TINNiK.NoCentroidCF (nmscCF N θ 0) := by
+  refine ⟨_, Tinnik.isGenericNull_centroid hN hBin, fun θ hθ hA hP9 h32 => ?_⟩
+  have hcen : Tinnik.NoCentroidCF (nmscCF N θ 0) := by
     by_contra hn
     exact hA ⟨hθ, hn⟩
   obtain ⟨α, hαpos, hαlt, hα₀, h⟩ := theorem36_of_proposition9 hN hLevel hθ hP9 h32 hcen
@@ -1472,16 +1472,16 @@ theorem not_theorem36AsPrinted {N : RootedNetwork V E X} [Nonempty X] (hN : N.Is
     (hcyc : ∀ q : Finset X, q.card = 4 → ¬ IsTreelike N q →
       ∃ s ∈ treesOn q, ¬ GroveDisplays N s ∧ ∃ r ∈ s.alternatives, GroveDisplays N r)
     {θ : MetricData E} (hθ : N.IsMetric θ) (h32 : ThreeTwoTreelike N (nmscCF N θ 0))
-    (hcen : ¬ TINNiK.NoCentroidCF (nmscCF N θ 0)) : ¬ Theorem36AsPrinted N := by
+    (hcen : ¬ Tinnik.NoCentroidCF (nmscCF N θ 0)) : ¬ Theorem36AsPrinted N := by
   intro h
   have hρ : (0 : ℝ) ≤ 0 ∧ (0 : ℝ) ≤ 1 := ⟨le_rfl, zero_le_one⟩
-  unfold TINNiK.NoCentroidCF at hcen
+  unfold Tinnik.NoCentroidCF at hcen
   push Not at hcen
   obtain ⟨q₀, hq₀, huni⟩ := hcen
   obtain ⟨α, -, -, -, hlim⟩ := h θ hθ h32
   obtain ⟨mlT, hmlT⟩ := exists_isMaxCountSelection hq₀
   obtain ⟨mlC, hmlC⟩ := exists_isMinCountSelection hq₀
-  exact not_tendsto_of_centroid (isDist_geneTreeDist hN hθ hρ) (TINNiK.displaysOne_nmsc hN)
+  exact not_tendsto_of_centroid (isDist_geneTreeDist hN hθ hρ) (Tinnik.displaysOne_nmsc hN)
     (fun q hq => ⟨networkClass_isClassOn N q, networkClass_ne_star hcyc hq⟩) hq₀ huni
     (β := 1 / 2) (by norm_num) (by norm_num) α hmlT hmlC
     (hlim (1 / 2) (by norm_num) (by norm_num) mlT mlC hmlT hmlC)

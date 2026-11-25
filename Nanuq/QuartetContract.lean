@@ -1,7 +1,7 @@
 module
 
 public import Nanuq.Quartet
-public import AllmanEtAl2023.TrdFour
+public import Allman2023.Networks.TrdFour
 
 /-!
 # The network `Q̃`: contracting the 2- and 3-cycles of a quartet network
@@ -18,8 +18,8 @@ identification of all vertices in it" (line 451). This module builds this graph,
 @[expose] public noncomputable section
 
 open Phylogenetics Phylogenetics.RootedNetwork Finset
-open TOBQMC TOBQMC.Level1
-open AllmanEtAl2023 AllmanEtAl2023.TreeSuppression
+open PhyloNetwork PhyloNetwork.Level1
+open Allman2023 Allman2023.TreeSuppression
 open scoped Classical
 
 namespace External.AllmanBanosRhodes2019.Quartet

@@ -1,6 +1,6 @@
 module
 
-public import TINNiK.Counts
+public import Tinnik.Algorithms.Counts
 
 /-!
 # NANUQ: the running time
@@ -9,7 +9,7 @@ The source (lines 1780-1791): "To analyze the running time for this algorithm, s
 constant time for each set of 4 taxa, for a total of `O(n⁴)`. Step 3 [...] an additional time of `O(n⁴)`. The NeighborNet algorithm in Step 4 takes time `O(n³)` [6]. Since NeighborNet can produce positive weights for all `O(n²)` splits consistent with some circular ordering of the taxa,
 results from [7] show that the time for the Circular Network Algorithm in Step 5 is `O(n⁴)`. Thus the total time for NANUQ is `O(n⁴ m)`."
 
-Steps 1 to 3 are counted as in TINNiK (`TINNiK.card_tabulation`, `TINNiK.sum_step2_statistics`, `TINNiK.sum_distance_incidences`). NeighborNet and the Circular Network algorithm are not formalized (the module's README): Steps 4 and 5 are costs `nn`, `cn` from their references, bounded as the source
+Steps 1 to 3 are counted as in TINNiK (`Tinnik.card_tabulation`, `Tinnik.sum_step2_statistics`, `Tinnik.sum_distance_incidences`). NeighborNet and the Circular Network algorithm are not formalized (the module's README): Steps 4 and 5 are costs `nn`, `cn` from their references, bounded as the source
 says. What is proved of them is the count of splits, `card_circularSplits_le`.
 -/
 
@@ -28,7 +28,7 @@ theorem card_circularSplits_le (n : ℕ) : (circularSplits n).card ≤ n * n := 
   refine card_image_le.trans ?_
   simp
 
-/-- The operations of NANUQ on `n` taxa and `m` gene trees, with costs `nn`, `cn` for Steps 4 and 5. Step 1: `3 C(n, 4) m` as in `TINNiK.card_tabulation`. Step 2: `4 C(n, 4)`, as in `TINNiK.sum_step2_statistics`. Step 3: `6 C(n, 4)`, as in `TINNiK.sum_distance_incidences`. -/
+/-- The operations of NANUQ on `n` taxa and `m` gene trees, with costs `nn`, `cn` for Steps 4 and 5. Step 1: `3 C(n, 4) m` as in `Tinnik.card_tabulation`. Step 2: `4 C(n, 4)`, as in `Tinnik.sum_step2_statistics`. Step 3: `6 C(n, 4)`, as in `Tinnik.sum_distance_incidences`. -/
 def nanuqOperations (n m nn cn : ℕ) : ℕ := 3 * n.choose 4 * m + 4 * n.choose 4 + 6 * n.choose 4 + nn + cn
 
 /-- **"Thus the total time for NANUQ is `O(n⁴ m)`"** (`nanuq:runtime`), for `m ≥ 1`. -/

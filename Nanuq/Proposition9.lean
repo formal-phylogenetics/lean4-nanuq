@@ -2,9 +2,9 @@ module
 
 public import Nanuq.NANUQ
 public import Nanuq.Placement
-public import TreeOfBlobs.InducedSplits
-public import TreeOfBlobs.Level1Blocks
-public import TreeOfBlobs.External.HuberEtAl2025.Theorem51
+public import PhyloNetwork.InducedSplits
+public import PhyloNetwork.Level1Blocks
+public import PhyloNetwork.External.HuberEtAl2025.Theorem51
 
 /-!
 # Proposition 9 of NANUQ on binary level-1 networks
@@ -19,7 +19,7 @@ The source takes its Proposition 9 (line 462) from its references [1, 3], and pr
   `Proposition9Part2.lean`, and all three parts in the source's terms are `Quartet.proposition9_source`, in `QuartetClass.lean`.
 * `nmscCF_lt_of_no_three_two`: part 1. On a cut-edge split of the induced network with no `3₂`-cycle, the quartet tree
   of the split has the strictly largest concordance factor. It does not matter whether the tree of blobs displays the
-  split. For a split it does not display, `TOBQMC.Level1.nmscCF_lt_of_not_displays` has this with no condition on
+  split. For a split it does not display, `PhyloNetwork.Level1.nmscCF_lt_of_not_displays` has this with no condition on
   cycles.
 * `exists_cycle_of_not_isTreelike`, `not_isTreelike_iff`: the structure of a set of four taxa with no cut-edge split.
 * `exists_two_displayed`: part 3. Such a set has two quartet trees displayed by the grove, and the third has the
@@ -55,7 +55,7 @@ at any `ρ`.
 @[expose] public noncomputable section
 
 open Phylogenetics Phylogenetics.RootedNetwork Phylogenetics.NMSC Finset
-open TOBQMC TOBQMC.Level1
+open PhyloNetwork PhyloNetwork.Level1
 open External.AllmanBanosRhodes2019.Placement
 open scoped Classical
 
@@ -66,7 +66,7 @@ variable {N : RootedNetwork V E X} {θ : MetricData E} {ρ : ℝ}
 
 omit [Fintype V] [Fintype E] in
 /-- Four taxa with two on each side of a cut edge are treelike: TOB-QMC's
-`TOBQMC.Level1.isTreelike_of_hasCutSplit`, from Theorem 5.1 of Huber et al. 2025, which is TOB-QMC's Lemma 2. -/
+`PhyloNetwork.Level1.isTreelike_of_hasCutSplit`, from Theorem 5.1 of Huber et al. 2025, which is TOB-QMC's Lemma 2. -/
 private theorem isTreelike_of_hasCutSplit (hN : N.IsPhylogenetic) {A Y : Finset X}
     (hA : N.HasCutSplit (A : Set X)) (hY : Y.card = 4) (hYA : (A ∩ Y).card = 2) : IsTreelike N Y := by
   obtain ⟨a₁, a₂, hne, h12⟩ := card_eq_two.mp hYA
@@ -250,7 +250,7 @@ theorem not_avoidingReach_of_isBridge (hN : N.IsPhylogenetic) {g : E} (hg : N.gr
     (hz : N.graph.Reaches (N.graph.target g) z) : ¬ N.AvoidingReach g N.root z := by
   intro hav
   have hroot : ¬ N.graph.Reaches (N.graph.target g) N.root :=
-    fun hr => TOBQMC.Level1.target_ne_root hN g (eq_root_of_reaches_root hN hr)
+    fun hr => PhyloNetwork.Level1.target_ne_root hN g (eq_root_of_reaches_root hN hr)
   obtain ⟨f, hfg, hs, ht, -⟩ := exists_entering_arc hav hroot hz
   exact hs ((isBridge_iff_reaches hN g).1 hg f hfg ht)
 
@@ -261,7 +261,7 @@ theorem not_avoidingReach_of_blob (hN : N.IsPhylogenetic) (hLevel : IsLevelOne N
     (hz : N.graph.Reaches (N.graph.target k) z) (hzh : ¬ N.graph.Reaches h z) : ¬ N.AvoidingReach k N.root z := by
   intro hav
   have hroot : ¬ N.graph.Reaches (N.graph.target k) N.root :=
-    fun hr => TOBQMC.Level1.target_ne_root hN k (eq_root_of_reaches_root hN hr)
+    fun hr => PhyloNetwork.Level1.target_ne_root hN k (eq_root_of_reaches_root hN hr)
   obtain ⟨f, hfk, hs, ht, hfz⟩ := exists_entering_arc hav hroot hz
   have := target_eq_reticulation hN hLevel hh hh₂ hc hfk ht hs
   rw [this] at hfz
@@ -1184,7 +1184,7 @@ theorem splitOffAt (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel : IsLevel
       rw [hza]
       intro hp
       have hroot : ¬ N.graph.Reaches (N.graph.target eh) N.root := fun hr =>
-        TOBQMC.Level1.target_ne_root hN eh (eq_root_of_reaches_root hN hr)
+        PhyloNetwork.Level1.target_ne_root hN eh (eq_root_of_reaches_root hN hr)
       have := hparent (Set.mem_insert_of_mem f hk₂) (reticulation_ne_root hN hh₂).symm hroot hp
       exact not_avoidingReach_of_blob hN hLevel hh hh₂ S.blob hrz (C.not_reaches_of_target₁ hN)
         this.avoidingReach_of_insert
@@ -1364,7 +1364,7 @@ theorem exists_deletion_keeping (hN : N.IsPhylogenetic) {k k' : E} (ht : N.graph
   obtain ⟨c₀⟩ := nonempty_parentChoice hN
   let c : N.ParentChoice := fun w => if hw : w.val = N.graph.target k then ⟨k, hw.symm⟩ else c₀ w
   refine ⟨N.deletedArcs c, isDeletion_deletedArcs hN c, fun f g hf hg hfg => eq_of_notMem_deletedArcs hN hf hg hfg, ?_⟩
-  refine mem_deletedArcs_of_ne (v := ⟨N.graph.target k, TOBQMC.Level1.target_ne_root hN k⟩) ht ?_
+  refine mem_deletedArcs_of_ne (v := ⟨N.graph.target k, PhyloNetwork.Level1.target_ne_root hN k⟩) ht ?_
   simpa [c] using hne
 
 /-- **A `4₁`-cycle, by the two sides of its cycle.** On a binary level-1 network, a set of four taxa with no cut-edge
@@ -1608,8 +1608,8 @@ open Filter Topology
 /-- The hypotheses of Theorem 36 give what the T3 test needs, in `src/TINNiK/T3.lean`, on a binary level-1 network. -/
 theorem t3Detectable [Nonempty X] (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel : IsLevelOne N)
     (hθ : N.IsMetric θ) (hρ : 0 ≤ ρ ∧ ρ ≤ 1) (h32 : ThreeTwoTreelike N (nmscCF N θ ρ))
-    (hcen : TINNiK.NoCentroidCF (nmscCF N θ ρ)) :
-    TINNiK.T3Detectable N (nmscCF N θ ρ) :=
+    (hcen : Tinnik.NoCentroidCF (nmscCF N θ ρ)) :
+    Tinnik.T3Detectable N (nmscCF N θ ρ) :=
   t3Detectable_of_proposition9 hN hLevel hθ hρ (proposition9 hN hBin hLevel hθ hρ) h32 hcen
 
 /-- **Theorem 36** (`nanuq:theorem36`), the part that is mathematics. "Under the NMSC model on a binary level-1 metric
@@ -1634,7 +1634,7 @@ factor (`tendsto_maxCount_t3`) are as printed; off the null the statistic grows 
 Departure from the paper: `α'_m` and `α_m` of the source are changed as `tendsto_t3PValue_lt_level` and
 `exists_levels` say, the second since the printed choice of a minimum does not work (`not_rejects_at_minimum`). -/
 theorem theorem36 [Nonempty X] (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel : IsLevelOne N) (hθ : N.IsMetric θ)
-    (h32 : ThreeTwoTreelike N (nmscCF N θ 0)) (hcen : TINNiK.NoCentroidCF (nmscCF N θ 0)) :
+    (h32 : ThreeTwoTreelike N (nmscCF N θ 0)) (hcen : Tinnik.NoCentroidCF (nmscCF N θ 0)) :
     ∃ α : ℕ → ℝ, (∀ m, 0 < α m) ∧ (∀ m, 1 ≤ m → α m < 1) ∧ Tendsto α atTop (𝓝 0) ∧
       ∀ β : ℝ, 0 < β → β < 1 → ∀ mlT mlC : (QuartetTree X → ℝ) → Finset X → QuartetTree X,
         IsMaxCountSelection mlT → IsMinCountSelection mlC →
@@ -1650,7 +1650,7 @@ that if they give the wanted object `y` on the theoretical distance, as the sour
 the references [6, 7] say, they give it with probability tending to one on the sample. The hypothesis `hA` is that
 statement. -/
 theorem theorem36_output [Nonempty X] (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel : IsLevelOne N)
-    (hθ : N.IsMetric θ) (h32 : ThreeTwoTreelike N (nmscCF N θ 0)) (hcen : TINNiK.NoCentroidCF (nmscCF N θ 0)) :
+    (hθ : N.IsMetric θ) (h32 : ThreeTwoTreelike N (nmscCF N θ 0)) (hcen : Tinnik.NoCentroidCF (nmscCF N θ 0)) :
     ∃ α : ℕ → ℝ, (∀ m, 0 < α m) ∧ (∀ m, 1 ≤ m → α m < 1) ∧ Tendsto α atTop (𝓝 0) ∧
       ∀ β : ℝ, 0 < β → β < 1 → ∀ mlT mlC : (QuartetTree X → ℝ) → Finset X → QuartetTree X,
         IsMaxCountSelection mlT → IsMinCountSelection mlC →
@@ -1660,7 +1660,7 @@ theorem theorem36_output [Nonempty X] (hN : N.IsPhylogenetic) (hBin : N.IsBinary
   theorem36_output_of_proposition9 hN hLevel hθ (proposition9 hN hBin hLevel hθ ⟨le_rfl, zero_le_one⟩) h32 hcen
 
 /-- **Theorem 36 for generic parameters**, with the hypothesis as printed. The centroid is excluded on a null set of
-parameters of a binary network (`TINNiK.isGenericNull_centroid`). -/
+parameters of a binary network (`Tinnik.isGenericNull_centroid`). -/
 theorem theorem36_generic [Nonempty X] (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel : IsLevelOne N) :
     ∃ A : Set (MetricData E), IsGenericNull N A ∧
       ∀ θ, N.IsMetric θ → θ ∉ A → ThreeTwoTreelike N (nmscCF N θ 0) →

@@ -24,7 +24,7 @@ network, and proves that `HasThreeTwoCycle` of `NANUQ.lean`, stated by blocks, i
 
 Representation. This module keeps `LSA(X)`, which Definition 4 suppresses: its two arcs stay, and a path of `N⁻` through the suppressed
 vertex is a path through it here. It is a vertex of degree two of `N⁻` before suppression, so that Definition 5 suppresses it in any case,
-if the arcs at it are kept (`keptDegree_lsa_le`). `QuartetSemidirected.lean` reads Definition 5 on `AllmanEtAl2023.semidirected`, which is
+if the arcs at it are kept (`keptDegree_lsa_le`). `QuartetSemidirected.lean` reads Definition 5 on `Allman2023.semidirected`, which is
 `N⁻` with the suppression carried out, and proves that the two readings keep the same edges (`mem_sTrekEdges_iff`, `image_sTrekEdges`) and
 give each vertex the same degree (`sKeptDegree_eq`).
 
@@ -42,7 +42,7 @@ give each vertex the same degree (`sKeptDegree_eq`).
 @[expose] public noncomputable section
 
 open Phylogenetics Phylogenetics.RootedNetwork Finset
-open TOBQMC TOBQMC.Level1
+open PhyloNetwork PhyloNetwork.Level1
 open scoped Classical
 
 namespace External.AllmanBanosRhodes2019.Quartet

@@ -1,8 +1,8 @@
 module
 
-public import TreeOfBlobs.Testing.MissingTaxa
+public import PhyloNetwork.Testing.MissingTaxa
 public import Nanuq.Proposition9
-public import TINNiK.MissingTaxa
+public import Tinnik.Consistency.MissingTaxa
 
 /-!
 # NANUQ with gene trees on subsets of the taxa
@@ -14,11 +14,11 @@ sources of error (line 2230).
 
 The procedure is Steps 2 and 3 on the counts of `Phylogenetics.quartetCountOn`, since `classify` takes the counts as an argument. What a source of
 this kind leaves to the reader is that the theorem carries over, when each set of four taxa is on more and more gene trees
-(`TINNiK.Covers`). So is it here: `theorem36_missing`, by the source's proof, on the gene trees containing each set of four taxa, which are an
+(`Tinnik.Covers`). So is it here: `theorem36_missing`, by the source's proof, on the gene trees containing each set of four taxa, which are an
 independent sample (`Phylogenetics.iidProb_quartetCountOn`).
 
-With a set of four taxa on no gene tree, the star test has p-value `1`, and on one gene tree `1/3` (`TINNiK.starPValue_of_forall_eq_zero`,
-`TINNiK.mem_testedB_of_coverCount_eq_one`): it is classified as a star tree at low levels `β`, so "appears on at least one tree" makes the algorithm
+With a set of four taxa on no gene tree, the star test has p-value `1`, and on one gene tree `1/3` (`Tinnik.starPValue_of_forall_eq_zero`,
+`Tinnik.mem_testedB_of_coverCount_eq_one`): it is classified as a star tree at low levels `β`, so "appears on at least one tree" makes the algorithm
 meaningful, and is not what the consistency theorem needs.
 -/
 
@@ -42,7 +42,7 @@ def RejectsOffNullOn (dist : Γ → ℝ) (sides : Γ → Finset (Finset X)) (on 
 
 /-- **The levels of Theorem 36 with missing taxa**: as `exists_levels`, the sample size in the level of each set of four taxa being the number of gene trees
 containing it. -/
-theorem exists_levels_on (hd : IsDist dist) (hs : QuartetTests.DisplaysOne dist sides) (hon : TINNiK.Covers on) :
+theorem exists_levels_on (hd : IsDist dist) (hs : QuartetTests.DisplaysOne dist sides) (hon : Tinnik.Covers on) :
     ∃ α : ℕ → ℝ, Tendsto α atTop (𝓝 0) ∧ (∀ m, 0 < α m) ∧ (∀ᶠ m in atTop, α m < 1) ∧ RejectsOffNullOn dist sides on α := by
   set p := displayCF dist sides with hp
   let Q : Finset (Finset X) := univ.filter fun q => q.card = 4 ∧ ¬ IsT3Null p q
@@ -65,8 +65,8 @@ theorem exists_levels_on (hd : IsDist dist) (hs : QuartetTests.DisplaysOne dist 
   refine ⟨α, ?_, fun m => (hpos _).trans_le (hbase m), ?_, ?_⟩
   · have hsum : Tendsto (fun m : ℕ => chiSqTwoTail (m * 1) +
         ∑ q ∈ Q, chiSqTwoTail ((coverCount (on m) q : ℕ) * (t3Stat p q / 2))) atTop (𝓝 0) := by
-      have := (TINNiK.tendsto_chiSqTwoTail_comp (k := id) tendsto_id one_pos).add
-        (tendsto_finsetSum Q fun q hq => TINNiK.tendsto_chiSqTwoTail_comp (hon q (mem_filter.mp hq).2.1) (hQ q hq))
+      have := (Tinnik.tendsto_chiSqTwoTail_comp (k := id) tendsto_id one_pos).add
+        (tendsto_finsetSum Q fun q hq => Tinnik.tendsto_chiSqTwoTail_comp (hon q (mem_filter.mp hq).2.1) (hQ q hq))
       simpa using this
     refine squeeze_zero (fun m => (hpos _).le.trans (hbase m)) (fun m => ?_) hsum
     refine (Finset.fold_max_le _).mpr ⟨?_, fun q hq => ?_⟩
@@ -89,8 +89,8 @@ theorem exists_levels_on (hd : IsDist dist) (hs : QuartetTests.DisplaysOne dist 
 /-- On a set of four taxa, Step 2 gives the population value, with missing taxa, with probability tending to one. Parallel to
 `tendsto_classify_eq_cfClass_at`, at a fixed level `β` as in the source's Theorem 36. -/
 theorem tendsto_classify_eq_cfClass_on (hd : IsDist dist) (hs : QuartetTests.DisplaysOne dist sides)
-    (hpos : ∀ r, 0 < displayCF dist sides r) (hon : TINNiK.Covers on) {α : ℕ → ℝ} (hα₀ : Tendsto α atTop (𝓝 0))
-    (hrej : RejectsOffNullOn dist sides on α) {β : ℝ} (hβ : 0 < β) (hcen : TINNiK.NoCentroidCF (displayCF dist sides))
+    (hpos : ∀ r, 0 < displayCF dist sides r) (hon : Tinnik.Covers on) {α : ℕ → ℝ} (hα₀ : Tendsto α atTop (𝓝 0))
+    (hrej : RejectsOffNullOn dist sides on α) {β : ℝ} (hβ : 0 < β) (hcen : Tinnik.NoCentroidCF (displayCF dist sides))
     {mlT mlC : (QuartetTree X → ℝ) → Finset X → QuartetTree X} (hmlT : IsMaxCountSelection mlT)
     (hmlC : IsMinCountSelection mlC) {q : Finset X} (hq : q.card = 4) :
     Tendsto (fun m => iidProb dist m fun ω =>
@@ -168,7 +168,7 @@ variable {V E : Type*} [Fintype V] [Fintype E] {N : RootedNetwork V E X} {θ : M
 to one. -/
 theorem theorem36_missing_of_proposition9 [Nonempty X] (hN : N.IsPhylogenetic) (hLevel : IsLevelOne N) (hθ : N.IsMetric θ)
     (hP9 : Proposition9 N (nmscCF N θ 0)) (h32 : ThreeTwoTreelike N (nmscCF N θ 0))
-    (hcen : TINNiK.NoCentroidCF (nmscCF N θ 0)) {on : (m : ℕ) → Fin m → Finset X} (hon : TINNiK.Covers on) :
+    (hcen : Tinnik.NoCentroidCF (nmscCF N θ 0)) {on : (m : ℕ) → Fin m → Finset X} (hon : Tinnik.Covers on) :
     ∃ α : ℕ → ℝ, (∀ m, 0 < α m) ∧ (∀ᶠ m in atTop, α m < 1) ∧ Tendsto α atTop (𝓝 0) ∧
       ∀ β : ℝ, 0 < β → β < 1 → ∀ mlT mlC : (QuartetTree X → ℝ) → Finset X → QuartetTree X,
         IsMaxCountSelection mlT → IsMinCountSelection mlC →
@@ -179,13 +179,13 @@ theorem theorem36_missing_of_proposition9 [Nonempty X] (hN : N.IsPhylogenetic) (
           atTop (𝓝 1) := by
   have hρ : (0 : ℝ) ≤ 0 ∧ (0 : ℝ) ≤ 1 := ⟨le_rfl, zero_le_one⟩
   have hd := isDist_geneTreeDist hN hθ hρ
-  obtain ⟨α, hα₀, hαpos, hαlt, hrej⟩ := exists_levels_on hd (TINNiK.displaysOne_nmsc (θ := θ) (ρ := 0) hN) hon
+  obtain ⟨α, hα₀, hαpos, hαlt, hrej⟩ := exists_levels_on hd (Tinnik.displaysOne_nmsc (θ := θ) (ρ := 0) hN) hon
   refine ⟨α, hαpos, hαlt, hα₀, fun β hβ _ mlT mlC hmlT hmlC => ?_⟩
   refine tendsto_iidProb_of_imp hd (Eventually.of_forall fun m ω hω => ?_)
     (tendsto_iidProb_forall hd (ι := {q : Finset X // q.card = 4})
       (fun q m ω => classify mlT mlC (α m) β (quartetCountOn unroot (on m) ω) q.val =
         cfClass (displayCF (geneTreeDist N θ 0) unroot) q.val)
-      fun q => tendsto_classify_eq_cfClass_on hd (TINNiK.displaysOne_nmsc hN) (fun r => nmscCF_pos hN hθ hρ r) hon hα₀ hrej hβ hcen
+      fun q => tendsto_classify_eq_cfClass_on hd (Tinnik.displaysOne_nmsc hN) (fun r => nmscCF_pos hN hθ hρ r) hon hα₀ hrej hβ hcen
         hmlT hmlC q.property)
   have hall : ∀ q : Finset X, q.card = 4 →
       classify mlT mlC (α m) β (quartetCountOn unroot (on m) ω) q = networkClass N q := fun q hq =>
@@ -194,8 +194,8 @@ theorem theorem36_missing_of_proposition9 [Nonempty X] (hN : N.IsPhylogenetic) (
 
 /-- **Theorem 36 with gene trees on subsets of the taxa** (`nanuq:theorem36`). Parallel to `theorem36`, with Proposition 9 proved. -/
 theorem theorem36_missing [Nonempty X] (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel : IsLevelOne N) (hθ : N.IsMetric θ)
-    (h32 : ThreeTwoTreelike N (nmscCF N θ 0)) (hcen : TINNiK.NoCentroidCF (nmscCF N θ 0))
-    {on : (m : ℕ) → Fin m → Finset X} (hon : TINNiK.Covers on) :
+    (h32 : ThreeTwoTreelike N (nmscCF N θ 0)) (hcen : Tinnik.NoCentroidCF (nmscCF N θ 0))
+    {on : (m : ℕ) → Fin m → Finset X} (hon : Tinnik.Covers on) :
     ∃ α : ℕ → ℝ, (∀ m, 0 < α m) ∧ (∀ᶠ m in atTop, α m < 1) ∧ Tendsto α atTop (𝓝 0) ∧
       ∀ β : ℝ, 0 < β → β < 1 → ∀ mlT mlC : (QuartetTree X → ℝ) → Finset X → QuartetTree X,
         IsMaxCountSelection mlT → IsMinCountSelection mlC →
@@ -211,15 +211,15 @@ theorem theorem36_missing [Nonempty X] (hN : N.IsPhylogenetic) (hBin : N.IsBinar
 theorem theorem36_generic_missing [Nonempty X] (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel : IsLevelOne N) :
     ∃ A : Set (MetricData E), IsGenericNull N A ∧
       ∀ θ, N.IsMetric θ → θ ∉ A → ThreeTwoTreelike N (nmscCF N θ 0) →
-      ∀ on : (m : ℕ) → Fin m → Finset X, TINNiK.Covers on →
+      ∀ on : (m : ℕ) → Fin m → Finset X, Tinnik.Covers on →
       ∃ α : ℕ → ℝ, (∀ m, 0 < α m) ∧ (∀ᶠ m in atTop, α m < 1) ∧ Tendsto α atTop (𝓝 0) ∧
         ∀ β : ℝ, 0 < β → β < 1 → ∀ mlT mlC : (QuartetTree X → ℝ) → Finset X → QuartetTree X,
           IsMaxCountSelection mlT → IsMinCountSelection mlC →
           Tendsto (fun m => iidProb (geneTreeDist N θ 0) m fun ω =>
             nanuqDistance (classify mlT mlC (α m) β (quartetCountOn unroot (on m) ω)) = networkDistance N)
             atTop (𝓝 1) := by
-  refine ⟨_, TINNiK.isGenericNull_centroid hN hBin, fun θ hθ hA h32 on hon => ?_⟩
-  have hcen : TINNiK.NoCentroidCF (nmscCF N θ 0) := by
+  refine ⟨_, Tinnik.isGenericNull_centroid hN hBin, fun θ hθ hA h32 on hon => ?_⟩
+  have hcen : Tinnik.NoCentroidCF (nmscCF N θ 0) := by
     by_contra hn
     exact hA ⟨hθ, hn⟩
   obtain ⟨α, hαpos, hαlt, hα₀, h⟩ := theorem36_missing hN hBin hLevel hθ h32 hcen hon

@@ -20,8 +20,8 @@ public import Nanuq.QuartetCycle
 @[expose] public noncomputable section
 
 open Phylogenetics Phylogenetics.RootedNetwork Finset
-open TOBQMC TOBQMC.Level1
-open AllmanEtAl2023 AllmanEtAl2023.TreeSuppression
+open PhyloNetwork PhyloNetwork.Level1
+open Allman2023 Allman2023.TreeSuppression
 open scoped Classical
 
 namespace External.AllmanBanosRhodes2019.Quartet

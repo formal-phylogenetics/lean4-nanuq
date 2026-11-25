@@ -26,7 +26,7 @@ masses are tree-like towards `ab|cd` (`isTL_of_colocated`), so that this tree ha
 @[expose] public noncomputable section
 
 open Phylogenetics Phylogenetics.RootedNetwork Phylogenetics.NMSC Finset
-open TOBQMC TOBQMC.Level1
+open PhyloNetwork PhyloNetwork.Level1
 open External.AllmanBanosRhodes2019.Placement
 open Phylogenetics.NMSC.Chain
 open scoped Classical
@@ -222,11 +222,11 @@ theorem half_le_cherryMass_two_reticulation (hN : N.IsPhylogenetic) (hθ : N.IsM
     intro f hf
     obtain ⟨hne', hr⟩ := (hmemD₀ _).1 hf
     refine (hmemD₀ _).2 ⟨fun heq => ?_, hr.tail ⟨f, rfl, rfl⟩⟩
-    exact hne' (eq_of_reaches_of_reaches hN.acyclic (heq ▸ TOBQMC.Level1.reaches_of_arc N f) hr)
+    exact hne' (eq_of_reaches_of_reaches hN.acyclic (heq ▸ PhyloNetwork.Level1.reaches_of_arc N f) hr)
   have hch : ∀ f, N.graph.source f = h → N.graph.target f ∈ D₀ := fun f hf => by
     refine (hmemD₀ _).2 ⟨fun heq => source_ne_target hN f (hf.trans heq.symm), ?_⟩
     rw [← hf]
-    exact TOBQMC.Level1.reaches_of_arc N f
+    exact PhyloNetwork.Level1.reaches_of_arc N f
   have hhD₀ : h ∉ D₀ := fun hm => ((hmemD₀ _).1 hm).1 rfl
   have hroot₀ : N.root ∉ D₀ := fun hm => root_notMem_atOrBelow hN hhr (mem_atOrBelow.2 ((hmemD₀ _).1 hm).2)
   have hDeq : atOrBelow N h = insert h D₀ := (insert_erase (mem_atOrBelow.2 .refl)).symm
@@ -274,7 +274,7 @@ theorem half_le_cherryMass_two_reticulation (hN : N.IsPhylogenetic) (hθ : N.IsM
   -- what is lifted, from a forest on one parent
   have hsrcD : ∀ {k : E}, N.graph.target k = h → N.graph.source k ∉ insert h D₀ := fun hkt => by
     rw [← hDeq, mem_atOrBelow]
-    exact fun hc' => TOBQMC.Level1.not_reaches_source hN _ (hkt ▸ hc')
+    exact fun hc' => PhyloNetwork.Level1.not_reaches_source hN _ (hkt ▸ hc')
   have hliftAt : ∀ {k : E} (G : Finset (Finset X)) (T : E → Finset (Finset X)), N.graph.target k = h → T k = G →
       (∀ f, N.graph.target f = h → f ≠ k → T f = ∅) → ∀ w,
       liftSet N (insert h D₀) (placeInj q P) (ow (arcsInto N h) top T) w =
@@ -763,7 +763,7 @@ theorem proposition9_part2 (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel :
       fun x hx y hy hxy hxA hyA => ?_
     exact hblock x (hsq ▸ hx) y (hsq ▸ hy) hxy (hnotb x hx hxA) (hnotb y hy hyA)
   · have hsum : ∑ r ∈ treesOn q, nmscCF N θ ρ r = 1 :=
-      QuartetTests.sum_displayCF_treesOn (isDist_geneTreeDist hN hθ hρ) (TINNiK.displaysOne_nmsc hN) hq
+      QuartetTests.sum_displayCF_treesOn (isDist_geneTreeDist hN hθ hρ) (Tinnik.displaysOne_nmsc hN) hq
     rcases cf_trichotomy hq hsum with huni | ⟨s', hs', hstrict⟩ | ⟨hno, -⟩
     · exact Or.inr huni
     · left

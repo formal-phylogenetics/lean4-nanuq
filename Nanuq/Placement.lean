@@ -1,8 +1,8 @@
 module
 
 public import Phylogenetics.NMSC.DisplayedTreeModel
-public import TreeOfBlobs.NMSCChain
-public import TreeOfBlobs.Wedge
+public import PhyloNetwork.NMSCChain
+public import PhyloNetwork.Wedge
 
 /-!
 # Singleton lineages at given vertices: comparing the masses of the quartet trees
@@ -471,7 +471,7 @@ theorem downClosed_atOrBelow (h : V) : DownClosed N (atOrBelow N h) := fun f hf 
 
 omit [Fintype E] [Fintype X] [DecidableEq X] in
 theorem root_notMem_atOrBelow (hN : N.IsPhylogenetic) {h : V} (hh : h ≠ N.root) : N.root ∉ atOrBelow N h := fun hm =>
-  hh (TOBQMC.Level1.eq_root_of_reaches_root hN (mem_atOrBelow.1 hm))
+  hh (PhyloNetwork.Level1.eq_root_of_reaches_root hN (mem_atOrBelow.1 hm))
 
 /-- The placement with the lineages `x`, `y` moved to `u`, `u'`. -/
 def moveTwo (P : X → V) (x y : X) (u u' : V) : X → V := fun z => if z = x then u else if z = y then u' else P z
@@ -494,7 +494,7 @@ theorem isTL_two_reticulation (hN : N.IsPhylogenetic) (hθ : N.IsMetric θ) (hρ
   have hF := frontier_of_prod_ne_zero hN hv (downClosed_atOrBelow h) hz
   have hl := validInj_liftSet hv hF
   have hsrcn : ∀ {k : E}, N.graph.target k = h → N.graph.source k ∉ atOrBelow N h := fun hk' hm =>
-    TOBQMC.Level1.not_reaches_source hN _ (hk' ▸ mem_atOrBelow.1 hm)
+    PhyloNetwork.Level1.not_reaches_source hN _ (hk' ▸ mem_atOrBelow.1 hm)
   have hhD : h ∈ atOrBelow N h := mem_atOrBelow.2 .refl
   -- only the arcs into `h` carry lineages
   have hemp : ∀ f, N.graph.target f ∈ atOrBelow N h → N.graph.source f ∉ atOrBelow N h →
@@ -611,11 +611,11 @@ theorem cherryMass_one_reticulation (hN : N.IsPhylogenetic) (hθ : N.IsMetric θ
     intro f hf
     obtain ⟨hne', hr⟩ := (hmemD₀ _).1 hf
     refine (hmemD₀ _).2 ⟨fun heq => ?_, hr.tail ⟨f, rfl, rfl⟩⟩
-    exact hne' (eq_of_reaches_of_reaches hN.acyclic (heq ▸ TOBQMC.Level1.reaches_of_arc N f) hr)
+    exact hne' (eq_of_reaches_of_reaches hN.acyclic (heq ▸ PhyloNetwork.Level1.reaches_of_arc N f) hr)
   have hch : ∀ f, N.graph.source f = h → N.graph.target f ∈ D₀ := fun f hf => by
     refine (hmemD₀ _).2 ⟨fun heq => source_ne_target hN f (hf.trans heq.symm), ?_⟩
     rw [← hf]
-    exact TOBQMC.Level1.reaches_of_arc N f
+    exact PhyloNetwork.Level1.reaches_of_arc N f
   have hhD₀ : h ∉ D₀ := fun hm => ((hmemD₀ _).1 hm).1 rfl
   have hroot₀ : N.root ∉ D₀ := fun hm => root_notMem_atOrBelow hN hhr (mem_atOrBelow.2 ((hmemD₀ _).1 hm).2)
   have hDeq : atOrBelow N h = insert h D₀ := (insert_erase (mem_atOrBelow.2 .refl)).symm
@@ -657,7 +657,7 @@ theorem cherryMass_one_reticulation (hN : N.IsPhylogenetic) (hθ : N.IsMetric θ
     intro k T hkt hTk hTo
     have hks : N.graph.source k ∉ insert h D₀ := by
       rw [← hDeq, mem_atOrBelow]
-      exact fun hc => TOBQMC.Level1.not_reaches_source hN k (hkt ▸ hc)
+      exact fun hc => PhyloNetwork.Level1.not_reaches_source hN k (hkt ▸ hc)
     funext w
     by_cases hw : w ∈ insert h D₀
     · have hrhs : placeInj q (Function.update P x (N.graph.source k)) w = ∅ := by
