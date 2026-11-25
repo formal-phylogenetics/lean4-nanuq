@@ -1,8 +1,8 @@
 module
 
 public import PhyloNetwork.Testing.MissingTaxa
-public import Nanuq.Proposition9
-public import Tinnik.Consistency.MissingTaxa
+public import Nanuq.ConcordanceFactors.Proposition9
+public import Nanuq.External.Tinnik.Consistency
 
 /-!
 # NANUQ with gene trees on subsets of the taxa
@@ -27,7 +27,7 @@ meaningful, and is not what the consistency theorem needs.
 open Phylogenetics Phylogenetics.RootedNetwork Finset Filter Topology
 open scoped Classical
 
-namespace External.AllmanBanosRhodes2019
+namespace Nanuq
 
 variable {X : Type*} [Fintype X] [DecidableEq X]
 
@@ -65,8 +65,8 @@ theorem exists_levels_on (hd : IsDist dist) (hs : QuartetTests.DisplaysOne dist 
   refine ⟨α, ?_, fun m => (hpos _).trans_le (hbase m), ?_, ?_⟩
   · have hsum : Tendsto (fun m : ℕ => chiSqTwoTail (m * 1) +
         ∑ q ∈ Q, chiSqTwoTail ((coverCount (on m) q : ℕ) * (t3Stat p q / 2))) atTop (𝓝 0) := by
-      have := (Tinnik.tendsto_chiSqTwoTail_comp (k := id) tendsto_id one_pos).add
-        (tendsto_finsetSum Q fun q hq => Tinnik.tendsto_chiSqTwoTail_comp (hon q (mem_filter.mp hq).2.1) (hQ q hq))
+      have := (External.Tinnik.tendsto_chiSqTwoTail_comp (k := id) tendsto_id one_pos).add
+        (tendsto_finsetSum Q fun q hq => External.Tinnik.tendsto_chiSqTwoTail_comp (hon q (mem_filter.mp hq).2.1) (hQ q hq))
       simpa using this
     refine squeeze_zero (fun m => (hpos _).le.trans (hbase m)) (fun m => ?_) hsum
     refine (Finset.fold_max_le _).mpr ⟨?_, fun q hq => ?_⟩
@@ -179,13 +179,13 @@ theorem theorem36_missing_of_proposition9 [Nonempty X] (hN : N.IsPhylogenetic) (
           atTop (𝓝 1) := by
   have hρ : (0 : ℝ) ≤ 0 ∧ (0 : ℝ) ≤ 1 := ⟨le_rfl, zero_le_one⟩
   have hd := isDist_geneTreeDist hN hθ hρ
-  obtain ⟨α, hα₀, hαpos, hαlt, hrej⟩ := exists_levels_on hd (Tinnik.displaysOne_nmsc (θ := θ) (ρ := 0) hN) hon
+  obtain ⟨α, hα₀, hαpos, hαlt, hrej⟩ := exists_levels_on hd (External.Tinnik.displaysOne_nmsc (θ := θ) (ρ := 0) hN) hon
   refine ⟨α, hαpos, hαlt, hα₀, fun β hβ _ mlT mlC hmlT hmlC => ?_⟩
   refine tendsto_iidProb_of_imp hd (Eventually.of_forall fun m ω hω => ?_)
     (tendsto_iidProb_forall hd (ι := {q : Finset X // q.card = 4})
       (fun q m ω => classify mlT mlC (α m) β (quartetCountOn unroot (on m) ω) q.val =
         cfClass (displayCF (geneTreeDist N θ 0) unroot) q.val)
-      fun q => tendsto_classify_eq_cfClass_on hd (Tinnik.displaysOne_nmsc hN) (fun r => nmscCF_pos hN hθ hρ r) hon hα₀ hrej hβ hcen
+      fun q => tendsto_classify_eq_cfClass_on hd (External.Tinnik.displaysOne_nmsc hN) (fun r => nmscCF_pos hN hθ hρ r) hon hα₀ hrej hβ hcen
         hmlT hmlC q.property)
   have hall : ∀ q : Finset X, q.card = 4 →
       classify mlT mlC (α m) β (quartetCountOn unroot (on m) ω) q = networkClass N q := fun q hq =>
@@ -218,7 +218,7 @@ theorem theorem36_generic_missing [Nonempty X] (hN : N.IsPhylogenetic) (hBin : N
           Tendsto (fun m => iidProb (geneTreeDist N θ 0) m fun ω =>
             nanuqDistance (classify mlT mlC (α m) β (quartetCountOn unroot (on m) ω)) = networkDistance N)
             atTop (𝓝 1) := by
-  refine ⟨_, Tinnik.isGenericNull_centroid hN hBin, fun θ hθ hA h32 on hon => ?_⟩
+  refine ⟨_, External.Tinnik.isGenericNull_centroid hN hBin, fun θ hθ hA h32 on hon => ?_⟩
   have hcen : Tinnik.NoCentroidCF (nmscCF N θ 0) := by
     by_contra hn
     exact hA ⟨hθ, hn⟩
@@ -229,4 +229,14 @@ theorem theorem36_generic_missing [Nonempty X] (hN : N.IsPhylogenetic) (hBin : N
 
 end Network
 
-end External.AllmanBanosRhodes2019
+end Nanuq
+
+/-! ### Former names
+
+The names under which lean4-ectoblob uses these declarations, in the namespace
+`External.AllmanBanosRhodes2019`: the definitions exported into it, and deprecated aliases of the
+theorems. -/
+
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.theorem36_missing_of_proposition9 := Nanuq.theorem36_missing_of_proposition9
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.theorem36_missing := Nanuq.theorem36_missing
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.theorem36_generic_missing := Nanuq.theorem36_generic_missing

@@ -1,6 +1,6 @@
 module
 
-public import Nanuq.QuartetContract
+public import Nanuq.QuartetDistance.Contract
 
 /-!
 # The network `Q̃` on a set of four taxa with no cut-edge split
@@ -21,7 +21,7 @@ open PhyloNetwork PhyloNetwork.Level1
 open Allman2023 Allman2023.TreeSuppression
 open scoped Classical
 
-namespace External.AllmanBanosRhodes2019.Quartet
+namespace Nanuq.Quartet
 
 variable {V E X : Type*} [Fintype V] [Fintype E] [Fintype X] [DecidableEq X]
 variable {N : RootedNetwork V E X} {q : Finset X} {a : X} {h T : V} {k₁ k₂ : E} {pL pR : List E}
@@ -362,7 +362,7 @@ theorem sum_nodeDegree_tilde [Fintype (TildeV N q)] [Fintype (TildeE N q)] :
     mem_blobArcs_iff.2 ⟨F.cycle.swap.source₁_sameBlob hN, F.cycle.target₂ ▸ F.cycle.reticulation⟩
   have hm := mem_tilde_of_blobArcs (q := q) (frame_hQ hN hBin hLevel F) hoff hk₂b
   have hne : Nonempty (TildeV N q) := ⟨toV (isKept_source hm.1)⟩
-  have hT := card_arcs_add_one (isTree_offGraph hN hBin hLevel F)
+  have hT := External.Allman2023.card_arcs_add_one (isTree_offGraph hN hBin hLevel F)
   have hc : Fintype.card {e : TildeE N q // e.1 ≠ k₂} + 1 = Fintype.card (TildeE N q) := by
     have h₁ := Fintype.card_subtype_compl (α := TildeE N q) (fun e => e.1 = k₂)
     have h₂ : Fintype.card {e : TildeE N q // e.1 = k₂} = 1 :=
@@ -370,7 +370,7 @@ theorem sum_nodeDegree_tilde [Fintype (TildeV N q)] [Fintype (TildeE N q)] :
     have h₃ : 0 < Fintype.card (TildeE N q) := Fintype.card_pos_iff.2 ⟨⟨k₂, hm⟩⟩
     have h₄ : Fintype.card {e : TildeE N q // e.1 ≠ k₂} = Fintype.card (TildeE N q) - Fintype.card {e : TildeE N q // e.1 = k₂} := h₁
     omega
-  rw [sum_nodeDegree]
+  rw [External.Allman2023.sum_nodeDegree]
   omega
 
 omit hBin in
@@ -506,4 +506,4 @@ theorem nodeDegree_eq_of_frame :
 
 end Degrees
 
-end External.AllmanBanosRhodes2019.Quartet
+end Nanuq.Quartet

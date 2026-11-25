@@ -1,6 +1,7 @@
 module
 
-public import Nanuq.QuartetCycle
+public import Nanuq.Basic.Data.List.Basic
+public import Nanuq.QuartetDistance.Cycle
 
 /-!
 # `Q̃` on a set of four taxa with no cut-edge split is the 4-cycle
@@ -10,7 +11,7 @@ public import Nanuq.QuartetCycle
 * `HasFourCycleTopology`: the literal 4-cycle with a taxon at each vertex, of the source's Figure 3 (R) after contraction.
 * `CycleGaps`, `exists_cycleGaps`, `CycleData`, `exists_cycleData`: the four taxa and their attachments in their order around the cycle, with
   the segments of the cycle between the attachments.
-* `CycleData.chainLink_leaf`, `CycleData.chainLink_gap`: the eight edges of `Q̃` are there. By the degrees, of `QuartetCycle.lean`, the
+* `CycleData.chainLink_leaf`, `CycleData.chainLink_gap`: the eight edges of `Q̃` are there. By the degrees, of `Nanuq/QuartetDistance/Cycle.lean`, the
   vertices between are suppressed.
 * `CycleData.exists_cl_of_chainLink`, `CycleData.branch_of_cl`: there are no others: a chain stays in one block or one segment.
 * `CycleData.hasFourCycleTopology`: **`Q̃` is the 4-cycle on the taxa in their order around the cycle.**
@@ -24,73 +25,9 @@ open PhyloNetwork PhyloNetwork.Level1
 open Allman2023 Allman2023.TreeSuppression
 open scoped Classical
 
-namespace External.AllmanBanosRhodes2019.Quartet
+namespace Nanuq.Quartet
 
 variable {V E X : Type*}
-
-/-! ### Lists -/
-
-section Lists
-
-variable {α β : Type*}
-
-/-- Two members of a list, in the order they come. -/
-theorem exists_sort_two {g : β → α} {L : List α} {u v : β} (hu : g u ∈ L) (hv : g v ∈ L) (huv : g u ≠ g v) :
-    ∃ a b, (a = u ∧ b = v ∨ a = v ∧ b = u) ∧ ∃ A B D, L = A ++ g a :: (B ++ g b :: D) := by
-  induction L with
-  | nil => simp at hu
-  | cons z L ih =>
-    by_cases hzu : z = g u
-    · subst hzu
-      have hv' : g v ∈ L := (List.mem_cons.1 hv).resolve_left (Ne.symm huv)
-      obtain ⟨B, D, rfl⟩ := List.append_of_mem hv'
-      exact ⟨u, v, Or.inl ⟨rfl, rfl⟩, [], B, D, rfl⟩
-    by_cases hzv : z = g v
-    · subst hzv
-      have hu' : g u ∈ L := (List.mem_cons.1 hu).resolve_left huv
-      obtain ⟨B, D, rfl⟩ := List.append_of_mem hu'
-      exact ⟨v, u, Or.inr ⟨rfl, rfl⟩, [], B, D, rfl⟩
-    obtain ⟨a, b, hab, A, B, D, rfl⟩ := ih ((List.mem_cons.1 hu).resolve_left (Ne.symm hzu)) ((List.mem_cons.1 hv).resolve_left (Ne.symm hzv))
-    exact ⟨a, b, hab, z :: A, B, D, rfl⟩
-
-/-- Three members of a list, in the order they come. -/
-theorem exists_sort_three {g : β → α} {L : List α} {u v w : β} (hu : g u ∈ L) (hv : g v ∈ L) (hw : g w ∈ L)
-    (huv : g u ≠ g v) (huw : g u ≠ g w) (hvw : g v ≠ g w) :
-    ∃ a b c, (∀ t, t = a ∨ t = b ∨ t = c ↔ t = u ∨ t = v ∨ t = w) ∧ ∃ A B D F, L = A ++ g a :: (B ++ g b :: (D ++ g c :: F)) := by
-  induction L with
-  | nil => simp at hu
-  | cons z L ih =>
-    by_cases hzu : z = g u
-    · subst hzu
-      obtain ⟨a, b, hab, A, B, D, rfl⟩ := exists_sort_two (g := g) ((List.mem_cons.1 hv).resolve_left (Ne.symm huv))
-        ((List.mem_cons.1 hw).resolve_left (Ne.symm huw)) hvw
-      refine ⟨u, a, b, fun t => ?_, [], A, B, D, rfl⟩
-      rcases hab with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;> tauto
-    by_cases hzv : z = g v
-    · subst hzv
-      obtain ⟨a, b, hab, A, B, D, rfl⟩ := exists_sort_two (g := g) ((List.mem_cons.1 hu).resolve_left huv)
-        ((List.mem_cons.1 hw).resolve_left (Ne.symm hvw)) huw
-      refine ⟨v, a, b, fun t => ?_, [], A, B, D, rfl⟩
-      rcases hab with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;> tauto
-    by_cases hzw : z = g w
-    · subst hzw
-      obtain ⟨a, b, hab, A, B, D, rfl⟩ := exists_sort_two (g := g) ((List.mem_cons.1 hu).resolve_left huw)
-        ((List.mem_cons.1 hv).resolve_left hvw) huv
-      refine ⟨w, a, b, fun t => ?_, [], A, B, D, rfl⟩
-      rcases hab with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;> tauto
-    obtain ⟨a, b, c, habc, A, B, D, F, rfl⟩ := ih ((List.mem_cons.1 hu).resolve_left (Ne.symm hzu))
-      ((List.mem_cons.1 hv).resolve_left (Ne.symm hzv)) ((List.mem_cons.1 hw).resolve_left (Ne.symm hzw))
-    exact ⟨a, b, c, habc, z :: A, B, D, F, rfl⟩
-
-/-- A pair in order is a sublist. -/
-theorem pair_sublist (X : List α) (u : α) (Y : List α) (w : α) (Z : List α) : List.Sublist [u, w] (X ++ u :: (Y ++ w :: Z)) := by
-  induction X with
-  | nil =>
-    refine List.Sublist.cons_cons u ?_
-    exact List.singleton_sublist.2 (by simp)
-  | cons a X ih => exact List.Sublist.cons a ih
-
-end Lists
 
 /-! ### Directed paths and sublists -/
 
@@ -307,7 +244,7 @@ theorem exists_cycleGaps (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel : I
   have hx₃ : x₃ ∈ q.erase a := (hmemE _).2 (Or.inr (Or.inr rfl))
   have hgne : ∀ {u v : X}, u ∈ q.erase a → v ∈ q.erase a → u ≠ v → g u ≠ g v := fun hu hv huv he =>
     huv (hinjatt (mem_of_mem_erase hu) (mem_of_mem_erase hv) (by rw [← (hg _ hu).2, ← (hg _ hv).2, he]))
-  obtain ⟨a₁, a₂, a₃, hall, A, B, D, G, heq⟩ := exists_sort_three (g := g) (L := St') (hg _ hx₁).1 (hg _ hx₂).1 (hg _ hx₃).1
+  obtain ⟨a₁, a₂, a₃, hall, A, B, D, G, heq⟩ := List.exists_sort_three (g := g) (L := St') (hg _ hx₁).1 (hg _ hx₂).1 (hg _ hx₃).1
     (hgne hx₁ hx₂ h₁₂) (hgne hx₁ hx₃ h₁₃) (hgne hx₂ hx₃ h₂₃)
   have hm₁ : a₁ ∈ q.erase a := (hmemE _).2 ((hall a₁).1 (Or.inl rfl))
   have hm₂ : a₂ ∈ q.erase a := (hmemE _).2 ((hall a₂).1 (Or.inr (Or.inl rfl)))
@@ -434,10 +371,10 @@ theorem exists_cycleGaps (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel : I
       exact hint i j c hc hc'
     · exact hinj
   · rw [← hverts, hvs]
-    have := pair_sublist (A.map Prod.snd) (att a₁) (B.map Prod.snd) (att a₂) (D.map Prod.snd ++ att a₃ :: G.map Prod.snd)
+    have := List.pair_sublist (A.map Prod.snd) (att a₁) (B.map Prod.snd) (att a₂) (D.map Prod.snd ++ att a₃ :: G.map Prod.snd)
     exact this
   · rw [← hverts, hvs]
-    have := pair_sublist (A.map Prod.snd ++ att a₁ :: B.map Prod.snd) (att a₂) (D.map Prod.snd) (att a₃) (G.map Prod.snd)
+    have := List.pair_sublist (A.map Prod.snd ++ att a₁ :: B.map Prod.snd) (att a₂) (D.map Prod.snd) (att a₃) (G.map Prod.snd)
     simpa using this
 
 /-- The data of `exists_cycleGaps`. -/
@@ -647,7 +584,7 @@ theorem CycleData.chainLink_leaf (i : Fin 4) :
     have hwalk : N.IsWalk (b 0) (N.downSteps l) (N.leaf (y 0)) := by
       rw [hb0, hy0]
       exact hl.isWalk_downSteps
-    have hrev := ChainLink.symm (chainLink_of_chain (hα := D.kept_b hN hBin hLevel 0) (hβ := D.kept_leaf hN (y 0) (D.y_mem 0))
+    have hrev := External.Allman2023.chainLink_symm (chainLink_of_chain (hα := D.kept_b hN hBin hLevel 0) (hβ := D.kept_leaf hN (y 0) (D.y_mem 0))
       hne.symm ?_ (chain_of_walk hwalk (fun t ht => ?_) (fun t ht hne' hk => ?_) _ _))
     · exact hrev
     · rw [nodeDegree_toV_leaf hN]
@@ -1310,5 +1247,17 @@ theorem exists_cycleData (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel : I
 
 end Order
 
+
+end Nanuq.Quartet
+
+/-! ### Former names
+
+The names under which lean4-ectoblob uses these declarations, in the namespace
+`External.AllmanBanosRhodes2019`: the definitions exported into it, and deprecated aliases of the
+theorems. -/
+
+namespace External.AllmanBanosRhodes2019.Quartet
+
+export Nanuq.Quartet (HasFourCycleTopology)
 
 end External.AllmanBanosRhodes2019.Quartet

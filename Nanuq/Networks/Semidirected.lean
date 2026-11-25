@@ -1,13 +1,13 @@
 module
 
-public import Allman2023.Networks.Definitions
-public import Nanuq.Quartet
+public import Nanuq.External.Allman2023.Quartets
+public import Nanuq.Networks.QuartetNetwork
 
 /-!
 # Definition 5 on `N⁻` itself
 
 Definition 4 obtains `N⁻` by "deleting all edges and nodes above `LSA(X)`", "undirecting all tree edges", and "suppressing `LSA(X)`". The
-object with the suppression carried out is `Allman2023.semidirected`, the same definition in Allman et al. 2023. `Quartet.lean` reads
+object with the suppression carried out is `Allman2023.semidirected`, the same definition in Allman et al. 2023. `Nanuq/Networks/QuartetNetwork.lean` reads
 Definition 5 on `N` itself, with `LSA(X)` kept as a vertex. This module reads it on that object, and proves that they agree.
 
 * `IsSPath`, `IsSSimpleTrek`, `sTrekEdges`: Definition 5, step 1, on any `SemidirectedNetwork`: "keeping only the edges in simple treks".
@@ -26,7 +26,7 @@ open PhyloNetwork PhyloNetwork.Level1
 open Allman2023
 open scoped Classical
 
-namespace External.AllmanBanosRhodes2019.Quartet
+namespace Nanuq.Quartet
 
 variable {V E X : Type*}
 
@@ -144,7 +144,7 @@ theorem isTreeArc_of_lsaPlus {f : N.belowArcs (lsaNode hN hX) Set.univ} (hf : (l
     intro hr
     rw [he] at hr
     exact not_reaches_target_source hP.acyclic f.1 (hr.trans f.2.1)
-  have hem : e ∈ N.belowArcs (lsaNode hN hX) Set.univ := (mem_belowArcs_univ_iff hN hX e).2 hnr
+  have hem : e ∈ N.belowArcs (lsaNode hN hX) Set.univ := (External.Allman2023.mem_belowArcs_univ_iff hN hX e).2 hnr
   have h₁ : (⟨e, hem⟩ : N.belowArcs (lsaNode hN hX) Set.univ) = g :=
     (hg ⟨e, hem⟩).1 (Subtype.ext he)
   have h₂ : f = g := (hg f).1 rfl
@@ -706,4 +706,4 @@ theorem sKeptDegree_eq [Fintype E] (q : Finset X) (v : SemidirectedVertex hN.isP
 
 end Bridge
 
-end External.AllmanBanosRhodes2019.Quartet
+end Nanuq.Quartet

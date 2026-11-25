@@ -17,7 +17,7 @@ says. What is proved of them is the count of splits, `card_circularSplits_le`.
 
 open Finset
 
-namespace External.AllmanBanosRhodes2019
+namespace Nanuq
 
 /-- The splits consistent with a circular ordering of `n` taxa: an arc of the circle is given by the pair of its two ends. -/
 def circularSplits (n : ℕ) : Finset (Finset (Fin n)) :=
@@ -47,4 +47,12 @@ theorem nanuqOperations_le {n m nn cn c₁ c₂ : ℕ} (hm : 1 ≤ m) (hn : 1 �
   rw [e]
   omega
 
-end External.AllmanBanosRhodes2019
+end Nanuq
+
+/-! ### Former names
+
+The names under which lean4-ectoblob uses these declarations, in the namespace
+`External.AllmanBanosRhodes2019`: the definitions exported into it, and deprecated aliases of the
+theorems. -/
+
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.nanuqOperations_le := Nanuq.nanuqOperations_le

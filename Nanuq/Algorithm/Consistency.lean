@@ -1,7 +1,7 @@
 module
 
 public import PhyloNetwork.External.Rhodes2020.Theorem2
-public import Tinnik.Consistency.T3
+public import Nanuq.External.Tinnik.Consistency
 public import PhyloNetwork.Level1CF
 
 /-!
@@ -29,7 +29,7 @@ plain text), and compared with the published text on the passages quoted.
 ## Theorem 36
 
 * `theorem36_of_proposition9`: the source's consistency theorem, down to the distance of Step 3, which is what its
-  proof shows; `theorem36_output_of_proposition9`, `theorem36_generic_of_proposition9`. `Proposition9.lean` proves
+  proof shows; `theorem36_output_of_proposition9`, `theorem36_generic_of_proposition9`. `Nanuq/ConcordanceFactors/Proposition9.lean` proves
   Proposition 9 on binary level-1 networks, and there these are `theorem36`, `theorem36_output`, `theorem36_generic`.
 * Their hypotheses: `ThreeTwoTreelike`, as printed; `Proposition9`, what is used of the source's Proposition 9; and
   `Tinnik.NoCentroidCF`, a correction.
@@ -46,12 +46,12 @@ plain text), and compared with the published text on the passages quoted.
    rejects with probability only tending to `β`, and the distance does not agree with the theoretical one with
    probability tending to one (`not_tendsto_of_centroid`, `not_theorem36AsPrinted`). A concrete binary level-1 network
    and parameters where this happens, with the concordance factors derived from the definition of the NMSC, are in
-   `ThreeTwoCycle.lean` (`ThreeTwo.not_theorem36AsPrinted_N₃`). The statement needs the extra hypothesis, which
+   `Nanuq/ConcordanceFactors/ThreeTwoCycle.lean` (`ThreeTwo.not_theorem36AsPrinted_N₃`). The statement needs the extra hypothesis, which
    Proposition 10's condition gives (`figure5_lt`) and generic parameters give (`theorem36_generic_of_proposition9`).
    The source's proof also passes over the step that the maximum likelihood topologies are the true ones, with
    probability tending to one, which is `tendsto_maxCount_t3` and `tendsto_minCount`.
 
-The strengthening of ECToBlob's Remark 8.3, with explicit levels, is in `src/ECToBlob/Remark83.lean`, from
+The strengthening of ECToBlob's Remark 8.3, with explicit levels, is in lean4-ectoblob's `ECToBlob/Remark83.lean`, from
 `tendsto_classify_eq_cfClass`.
 -/
 
@@ -60,7 +60,7 @@ The strengthening of ECToBlob's Remark 8.3, with explicit levels, is in `src/ECT
 open Phylogenetics Phylogenetics.RootedNetwork Finset Filter Topology
 open scoped Classical
 
-namespace External.AllmanBanosRhodes2019
+namespace Nanuq
 
 variable {X : Type*} [Fintype X] [DecidableEq X]
 
@@ -681,8 +681,8 @@ theorem exists_levels (hd : IsDist dist) (hs : QuartetTests.DisplaysOne dist sid
   refine ⟨α, ?_, fun m => (hpos _).trans_le (hbase m), fun m hm => ?_, ?_⟩
   · have hsum : Tendsto (fun m : ℕ => chiSqTwoTail (m * 1) + ∑ q ∈ Q, chiSqTwoTail (m * (t3Stat p q / 2)))
         atTop (𝓝 0) := by
-      have := (Tinnik.tendsto_chiSqTwoTail_mul (d := 1) one_pos).add
-        (tendsto_finsetSum Q fun q hq => Tinnik.tendsto_chiSqTwoTail_mul (hQ q hq))
+      have := (External.Tinnik.tendsto_chiSqTwoTail_mul (d := 1) one_pos).add
+        (tendsto_finsetSum Q fun q hq => External.Tinnik.tendsto_chiSqTwoTail_mul (hQ q hq))
       simpa using this
     refine squeeze_zero (fun m => (hpos _).le.trans (hbase m)) (fun m => ?_) hsum
     refine (Finset.fold_max_le _).mpr ⟨?_, fun q hq => ?_⟩
@@ -1074,7 +1074,7 @@ equal, so it is tree-like in the sense of Definition 8, which says so of this po
 "Since the network is binary, the true multinomial parameter values are `CF = (p₁, p₂, p₃)` with `p_i ≠ 1/3` or `0`"
 (line 2023), and that is false here. The point is on the boundary `CF_AB|CD = CF_AC|BD` of the tree-like region of
 equation (1). The formula is derived from the definition of the NMSC, for a rooted form of that network, in
-`src/External/AllmanBanosRhodes2019/ThreeTwoCycle.lean` (`ThreeTwo.nmscCF_N₃_abcd`, `ThreeTwo.centroid_N₃`). -/
+`Nanuq/ConcordanceFactors/ThreeTwoCycle.lean` (`ThreeTwo.nmscCF_N₃_abcd`, `ThreeTwo.centroid_N₃`). -/
 theorem figure5_centroid :
     figure5CFab (1 / 2) (40 / 43) (9 / 10) (1 / 2) (9 / 10) = 1 / 3 ∧
       figure5CFac (1 / 2) (40 / 43) (9 / 10) (1 / 2) (9 / 10) = 1 / 3 := by
@@ -1174,7 +1174,7 @@ it, the other two being in different blocks at its blob (TOB-QMC's blocks, `Phyl
 three parts of `q` meet the cycle at three vertices.
 
 The source's definition is by the cycles of the quartet network of its Definition 5. On a binary level-1 network the two
-agree: `Quartet.hasThreeTwoCycle_iff`, in `Quartet.lean`. -/
+agree: `Quartet.hasThreeTwoCycle_iff`, in `Nanuq/Networks/QuartetNetwork.lean`. -/
 def HasThreeTwoCycle (N : RootedNetwork V E X) (q : Finset X) : Prop :=
   ∃ h : V, 2 ≤ N.graph.indegree h ∧ (q.filter fun x => N.graph.Reaches h (N.leaf x)).card = 2 ∧
     ∀ x ∈ q, ∀ y ∈ q, x ≠ y → ¬ N.graph.Reaches h (N.leaf x) → ¬ N.graph.Reaches h (N.leaf y) →
@@ -1187,7 +1187,7 @@ def ThreeTwoTreelike (N : RootedNetwork V E X) (p : QuartetTree X → ℝ) : Pro
   ∀ q : Finset X, q.card = 4 → HasThreeTwoCycle N q → IsT3Null p q
 
 /-- **What Theorem 36 uses of the source's Proposition 9**, on concordance factors of level-1 networks. The source
-takes it from its references [1, 3]. It is proved on binary level-1 networks in `Proposition9.lean` (`proposition9`).
+takes it from its references [1, 3]. It is proved on binary level-1 networks in `Nanuq/ConcordanceFactors/Proposition9.lean` (`proposition9`).
 The parts:
 
 * `no_three_two`: part 1. If `Q` has no `4₁`-cycle or `3₂`-cycle, its concordance factor supports `Q̃`, for a split
@@ -1201,7 +1201,7 @@ The parts:
   `networkClass` the `Q̃` of Definition 20.
 
 Part 2 (the extended line segment) is not needed: its equality is `NMSC.cut_alternatives`. It is
-`proposition9_part2`, in `Proposition9Part2.lean`. -/
+`proposition9_part2`, in `Nanuq/ConcordanceFactors/Proposition9Part2.lean`. -/
 structure Proposition9 (N : RootedNetwork V E X) (p : QuartetTree X → ℝ) : Prop where
   no_three_two : ∀ s : QuartetTree X, Displays (treeOfBlobs N) s → ¬ HasThreeTwoCycle N s.taxa →
     ∀ r ∈ s.alternatives, p r < p s
@@ -1217,7 +1217,7 @@ the source's extension (lines 1964-1968). In a binary level-1 network there is n
 `Proposition9.cycle_exists`.
 
 The source's `Q̃` is by the contraction of the 2- and 3-cycles of the quartet network. On a binary level-1 network the two
-agree: `Quartet.networkClass_eq_tree_iff`, `Quartet.networkClass_eq_cycle_iff`, in `QuartetClass.lean`. -/
+agree: `Quartet.networkClass_eq_tree_iff`, `Quartet.networkClass_eq_cycle_iff`, in `Nanuq/QuartetDistance/Class.lean`. -/
 def networkClass (N : RootedNetwork V E X) (q : Finset X) : QuartetClass X :=
   if h : ∃ s ∈ treesOn q, InducedCutSplit N s then .tree h.choose
   else if h' : ∃ s ∈ treesOn q, ¬ GroveDisplays N s ∧ ∃ r ∈ s.alternatives, GroveDisplays N r then .cycle h'.choose
@@ -1264,7 +1264,7 @@ theorem isT1Strict_of_inducedCutSplit [Nonempty X] {N : RootedNetwork V E X} (hN
   · by_cases h3 : HasThreeTwoCycle N s.taxa
     · have hq := s.card_taxa
       have hsum : ∑ r ∈ treesOn s.taxa, nmscCF N θ ρ r = 1 :=
-        QuartetTests.sum_displayCF_treesOn (isDist_geneTreeDist hN hθ hρ) (Tinnik.displaysOne_nmsc hN) hq
+        QuartetTests.sum_displayCF_treesOn (isDist_geneTreeDist hN hθ hρ) (External.Tinnik.displaysOne_nmsc hN) hq
       rcases cf_trichotomy hq hsum with huni | ⟨s', hs', hstrict⟩ | ⟨hnull, -⟩
       · exact absurd huni (hcen _ hq)
       · have hst : s'.taxa = s.taxa := mem_treesOn.1 hs'
@@ -1287,7 +1287,7 @@ theorem isT1Strict_of_inducedCutSplit [Nonempty X] {N : RootedNetwork V E X} (hN
     · exact hP9.no_three_two s hd h3 r hr
   · exact PhyloNetwork.Level1.nmscCF_lt_of_not_displays hN hLevel hθ hρ hs hd hr
 
-/-- The hypotheses give what the T3 test needs, in `src/TINNiK/T3.lean`. So they also give the T3 option of Tinnik. -/
+/-- The hypotheses give what the T3 test needs, in lean4-tinnik's `Tinnik/Consistency/T3.lean`. So they also give the T3 option of Tinnik. -/
 theorem t3Detectable_of_proposition9 [Nonempty X] {N : RootedNetwork V E X} (hN : N.IsPhylogenetic)
     (hLevel : IsLevelOne N) {θ : MetricData E} (hθ : N.IsMetric θ) {ρ : ℝ} (hρ : 0 ≤ ρ ∧ ρ ≤ 1)
     (hP9 : Proposition9 N (nmscCF N θ ρ)) (h32 : ThreeTwoTreelike N (nmscCF N θ ρ))
@@ -1348,7 +1348,7 @@ theorem tendsto_classify_eq_networkClass [Nonempty X] {N : RootedNetwork V E X} 
         nanuqDistance (classify mlT mlC (α n) (β n) (quartetCount unroot ω)) = networkDistance N) atTop (𝓝 1) := by
   have hd := isDist_geneTreeDist hN hθ hρ
   refine tendsto_iidProb_of_imp hd (Eventually.of_forall fun n ω hω => ?_)
-    (tendsto_classify_eq_cfClass hd (Tinnik.displaysOne_nmsc hN) (fun r => nmscCF_pos hN hθ hρ r) hα₀ hrej hβ hβlog
+    (tendsto_classify_eq_cfClass hd (External.Tinnik.displaysOne_nmsc hN) (fun r => nmscCF_pos hN hθ hρ r) hα₀ hrej hβ hβlog
       (Or.inl hcen) hmlT hmlC)
   have hall : ∀ q : Finset X, q.card = 4 →
       classify mlT mlC (α n) (β n) (quartetCount unroot ω) q = networkClass N q := fun q hq =>
@@ -1356,7 +1356,7 @@ theorem tendsto_classify_eq_networkClass [Nonempty X] {N : RootedNetwork V E X} 
   exact ⟨hall, nanuqDistance_congr hall⟩
 
 /-- **Theorem 36 for any network and parameters with what it uses of Proposition 9.** The label and the discussion are
-at `theorem36`, in `Proposition9.lean`, which gives `hP9` on a binary level-1 network. The network being binary is
+at `theorem36`, in `Nanuq/ConcordanceFactors/Proposition9.lean`, which gives `hP9` on a binary level-1 network. The network being binary is
 used only through Proposition 9, so it is not a hypothesis here. -/
 theorem theorem36_of_proposition9 [Nonempty X] {N : RootedNetwork V E X} (hN : N.IsPhylogenetic)
     (hLevel : IsLevelOne N) {θ : MetricData E} (hθ : N.IsMetric θ) (hP9 : Proposition9 N (nmscCF N θ 0))
@@ -1370,7 +1370,7 @@ theorem theorem36_of_proposition9 [Nonempty X] {N : RootedNetwork V E X} (hN : N
           atTop (𝓝 1) := by
   have hρ : (0 : ℝ) ≤ 0 ∧ (0 : ℝ) ≤ 1 := ⟨le_rfl, zero_le_one⟩
   obtain ⟨α, hα₀, hαpos, hαlt, hrej⟩ :=
-    exists_levels (isDist_geneTreeDist hN hθ hρ) (Tinnik.displaysOne_nmsc (θ := θ) (ρ := 0) hN)
+    exists_levels (isDist_geneTreeDist hN hθ hρ) (External.Tinnik.displaysOne_nmsc (θ := θ) (ρ := 0) hN)
   refine ⟨α, hαpos, hαlt, hα₀, fun β hβ _ mlT mlC hmlT hmlC => ?_⟩
   exact tendsto_classify_eq_networkClass hN hLevel hθ hρ hP9 h32 hcen hα₀ hrej (β := fun _ => β)
     (fun _ => hβ) (tendsto_log_const_div β) hmlT hmlC
@@ -1403,7 +1403,7 @@ theorem theorem36_generic_of_proposition9 [Nonempty X] {N : RootedNetwork V E X}
           Tendsto (fun m => iidProb (geneTreeDist N θ 0) m fun ω =>
             nanuqDistance (classify mlT mlC (α m) β (quartetCount unroot ω)) = networkDistance N)
             atTop (𝓝 1) := by
-  refine ⟨_, Tinnik.isGenericNull_centroid hN hBin, fun θ hθ hA hP9 h32 => ?_⟩
+  refine ⟨_, External.Tinnik.isGenericNull_centroid hN hBin, fun θ hθ hA hP9 h32 => ?_⟩
   have hcen : Tinnik.NoCentroidCF (nmscCF N θ 0) := by
     by_contra hn
     exact hA ⟨hθ, hn⟩
@@ -1463,7 +1463,7 @@ def Theorem36AsPrinted (N : RootedNetwork V E X) : Prop :=
 factor is at the centroid, then the conclusion fails at the level of the distance: for every sequence `α_m` and every
 `β < 1`, the probability that the distance agrees with the theoretical one does not tend to one. The centroid is
 reached by the formula that the source prints for a `3₂`-cycle (`figure5_centroid`).
-`ThreeTwo.not_theorem36AsPrinted_N₃`, in `src/External/AllmanBanosRhodes2019/ThreeTwoCycle.lean`, applies this to a
+`ThreeTwo.not_theorem36AsPrinted_N₃`, in `Nanuq/ConcordanceFactors/ThreeTwoCycle.lean`, applies this to a
 concrete binary level-1 network.
 
 What the splits graph then does after NeighborNet is not determined by this. On four taxa, though, the computed
@@ -1481,11 +1481,34 @@ theorem not_theorem36AsPrinted {N : RootedNetwork V E X} [Nonempty X] (hN : N.Is
   obtain ⟨α, -, -, -, hlim⟩ := h θ hθ h32
   obtain ⟨mlT, hmlT⟩ := exists_isMaxCountSelection hq₀
   obtain ⟨mlC, hmlC⟩ := exists_isMinCountSelection hq₀
-  exact not_tendsto_of_centroid (isDist_geneTreeDist hN hθ hρ) (Tinnik.displaysOne_nmsc hN)
+  exact not_tendsto_of_centroid (isDist_geneTreeDist hN hθ hρ) (External.Tinnik.displaysOne_nmsc hN)
     (fun q hq => ⟨networkClass_isClassOn N q, networkClass_ne_star hcyc hq⟩) hq₀ huni
     (β := 1 / 2) (by norm_num) (by norm_num) α hmlT hmlC
     (hlim (1 / 2) (by norm_num) (by norm_num) mlT mlC hmlT hmlC)
 
 end Network
 
+end Nanuq
+
+/-! ### Former names
+
+The names under which lean4-ectoblob uses these declarations, in the namespace
+`External.AllmanBanosRhodes2019`: the definitions exported into it, and deprecated aliases of the
+theorems. -/
+
+namespace External.AllmanBanosRhodes2019
+
+export Nanuq (IsMaxCountSelection IsMinCountSelection classify cfClass nanuqDistance ThreeTwoTreelike networkClass networkDistance)
+
 end External.AllmanBanosRhodes2019
+
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.cfClass_eq_star := Nanuq.cfClass_eq_star
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.isDist_geneTreeDist := Nanuq.isDist_geneTreeDist
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.nanuqDistance_congr := Nanuq.nanuqDistance_congr
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.rejectsOffNull_of_log := Nanuq.rejectsOffNull_of_log
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.tendsto_classify_eq_cfClass := Nanuq.tendsto_classify_eq_cfClass
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.tendsto_classify_eq_networkClass := Nanuq.tendsto_classify_eq_networkClass
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.tendsto_log_const_div := Nanuq.tendsto_log_const_div
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.tendsto_starPValue_lt := Nanuq.tendsto_starPValue_lt
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.tendsto_ne_of_centroid := Nanuq.tendsto_ne_of_centroid
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.tendsto_star_le_of_centroid := Nanuq.tendsto_star_le_of_centroid

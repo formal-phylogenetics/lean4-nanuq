@@ -1,7 +1,7 @@
 module
 
 public import PhyloNetwork.NMSCChain
-public import Nanuq.Proposition9
+public import Nanuq.Algorithm.Theorem36
 
 /-!
 # A `3₂`-cycle at the centroid: Theorem 36 of NANUQ as printed fails
@@ -14,7 +14,7 @@ two taxa below the reticulation.
 ## Main results
 
 * `nmscCF_N₃`: its concordance factors from the definition of the NMSC, at any `ρ`, by the chain of
-  `src/Basic/NMSCChain.lean`, with two new steps: `stepOf_three` for three lineages on an arc, and `stepOf_cherry`.
+  lean4-phylo-network's `PhyloNetwork/NMSCChain.lean`, with two new steps: `stepOf_three` for three lineages on an arc, and `stepOf_cherry`.
 * `nmscCF_N₃_abcd`, `nmscCF_N₃_acbd`, `nmscCF_N₃_adbc`: at `ρ = 0` they are the source's formula, `figure5CFab`,
   `figure5CFac`, with `x₃` for the edge `u v` of the unrooted network. The source takes the formula from its references.
 * `isBinary_N₃`, `isLevelOne_N₃`, `hasThreeTwoCycle_N₃`, `inducedCutSplit_N₃`.
@@ -31,7 +31,7 @@ open Phylogenetics Phylogenetics.RootedNetwork Phylogenetics.NMSC Finset
 open Phylogenetics.NMSC.Chain
 open scoped Classical
 
-namespace External.AllmanBanosRhodes2019.ThreeTwo
+namespace Nanuq.ThreeTwo
 
 export Phylogenetics.FinFour (taxa_eq_univ abcd acbd adbc Fab Cab Fall)
 
@@ -688,7 +688,7 @@ theorem nmscCF_N₃ (hθ : N₃.IsMetric θ) (hρ : 0 ≤ ρ ∧ ρ ≤ 1) (r : 
       (by decide) h)
 
 /-- **The source's formula for the first entry**, derived from the definition of the NMSC: `figure5CFab` of
-`NANUQ.lean`, with `γ` the inheritance of the arc from `v`, `x₁` for the arc below the reticulation, `x₂`, `x₄` for
+`Nanuq/Algorithm/Consistency.lean`, with `γ` the inheritance of the arc from `v`, `x₁` for the arc below the reticulation, `x₂`, `x₄` for
 the hybrid arcs and `x₃` for the edge `u v` of the unrooted network. -/
 theorem nmscCF_N₃_abcd (hθ : N₃.IsMetric θ) :
     nmscCF N₃ θ 0 abcd = figure5CFab (θ.inheritance .vh) (Real.exp (-θ.length .hw)) (Real.exp (-θ.length .uh)) (x₃ θ)
@@ -1076,7 +1076,7 @@ theorem networkClass_N₃ : networkClass N₃ univ = .tree abcd := by
   unfold networkClass
   rw [dite_eq_left hex]
   congr 1
-  exact Allman2023.inducedCutSplit_unique isPhylogenetic_N₃ hex.choose_spec.2 inducedCutSplit_N₃
+  exact External.Allman2023.inducedCutSplit_unique isPhylogenetic_N₃ hex.choose_spec.2 inducedCutSplit_N₃
     ((taxa_eq_univ _).trans (taxa_eq_univ _).symm)
 
 theorem cfClass_metric₃ : cfClass (nmscCF N₃ metric₃ 0) univ = .star :=
@@ -1215,4 +1215,12 @@ theorem exists_not_isT3Null_N₃ : ∃ θ : MetricData E₃, N₃.IsMetric θ �
   · exact hab.ne (heq abcd (halt hne₁.symm) adbc (halt hne₃) |>.trans had)
   · exact hab.ne (heq abcd (halt hne₂.symm) acbd (halt hne₃.symm))
 
-end External.AllmanBanosRhodes2019.ThreeTwo
+end Nanuq.ThreeTwo
+
+/-! ### Former names
+
+The names under which lean4-ectoblob uses these declarations, in the namespace
+`External.AllmanBanosRhodes2019`: the definitions exported into it, and deprecated aliases of the
+theorems. -/
+
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.ThreeTwo.networkClass_N₃ := Nanuq.ThreeTwo.networkClass_N₃

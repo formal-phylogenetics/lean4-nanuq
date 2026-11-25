@@ -1,14 +1,15 @@
 module
 
-public import Nanuq.Quartet
-public import Allman2023.Networks.TrdFour
+public import Nanuq.Networks.QuartetNetwork
+public import Nanuq.External.Allman2023.Quartets
+public import Nanuq.External.Allman2023.TreeSuppression
 
 /-!
 # The network `Q̃`: contracting the 2- and 3-cycles of a quartet network
 
 "After contracting all 2- and 3-cycles, and suppressing degree 2 nodes, we obtain a network `Q̃_xyzw` that is either a tree or has a
 single 4-cycle" (Definition 20, line 1026), and "by contraction of a cycle, we mean the removal of its edges followed by the
-identification of all vertices in it" (line 451). This module builds this graph, and `QuartetClass.lean` reads it.
+identification of all vertices in it" (line 451). This module builds this graph, and `Nanuq/QuartetDistance/Class.lean` reads it.
 
 * `contractedArcs`: the edges of the 2- and 3-cycles of the quartet network on `q`.
 * `tildeGraph`: the graph with those removed and the ends of each identified, on the classes of the kept vertices.
@@ -22,7 +23,7 @@ open PhyloNetwork PhyloNetwork.Level1
 open Allman2023 Allman2023.TreeSuppression
 open scoped Classical
 
-namespace External.AllmanBanosRhodes2019.Quartet
+namespace Nanuq.Quartet
 
 variable {V E X : Type*}
 
@@ -607,7 +608,7 @@ theorem qTilde_hasSide_iff (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel :
     (qTilde hN (by omega : 2 ≤ #q)).HasSide A ↔ N.HasWedgeCutSplit (q : Set X) (Subtype.val '' A) := by
   have hG := isTree_tildeGraph hN hBin hLevel hq ht
   unfold qTilde
-  rw [hasSide_iff hG]
+  rw [External.Allman2023.hasSide_iff hG]
   constructor
   · rintro ⟨e, T, hT, hA⟩
     refine ⟨e.1, by rw [← trekArcs_eq_wedgeArcs hN]; exact e.2.1, {v | ∃ hv : IsKept N q v, toV hv ∈ T}, fun f hf => ?_, fun x hx => ?_⟩
@@ -617,7 +618,7 @@ theorem qTilde_hasSide_iff (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel :
         by_contra hne
         exact crosses_of_isSideOf hT hf hne hc
       · rintro rfl
-        rcases hT.crosses with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+        rcases External.Allman2023.isSideOf_crosses hT with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
         · exact Or.inl ⟨⟨isKept_source e.2.1, h₁⟩, fun ⟨_, h'⟩ => h₂ h'⟩
         · exact Or.inr ⟨⟨isKept_target e.2.1, h₁⟩, fun ⟨_, h'⟩ => h₂ h'⟩
     · have hx' : x ∈ q := mem_coe.1 hx
@@ -664,7 +665,7 @@ theorem eq_of_toV_leaf_eq (hN : N.IsPhylogenetic) {x : X} {v : V} {hx : IsKept N
     · exact Or.inr h₁
   exact (mem_iff_of_toV_eq hS h).2 rfl
 
-/-- The numbers of `LabelledGraph.hasStar_or_hasQuartet`. -/
+/-- The numbers of `External.Allman2023.hasStar_or_hasQuartet`. -/
 theorem qTilde_hasStar_or_hasQuartet (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel : IsLevelOne N) (hq : #q = 4)
     (ht : IsTreelike N q) {a b c d : {x // x ∈ q}} (h : ({a, b, c, d} : Finset {x // x ∈ q}).card = 4) :
     (qTilde hN (by omega : 2 ≤ #q)).HasStarTopology a b c d ∨ (qTilde hN (by omega : 2 ≤ #q)).HasQuartetTopology a b c d ∨
@@ -672,15 +673,15 @@ theorem qTilde_hasStar_or_hasQuartet (hN : N.IsPhylogenetic) (hBin : N.IsBinary)
   have hG := isTree_tildeGraph hN hBin hLevel hq ht
   have hq2 : 2 ≤ #q := by omega
   have hne : Nonempty {w // nodeDegree (tildeGraph N q) w ≠ 2} := ⟨(qTilde hN hq2).leaf a⟩
-  refine LabelledGraph.hasStar_or_hasQuartet (qTilde hN hq2) (isTree_suppressDegreeTwo hG) ?_ (by simpa using hq) (fun x => ?_) (fun v hv => ?_) h
+  refine External.Allman2023.hasStar_or_hasQuartet (qTilde hN hq2) (External.Allman2023.isTree_suppressDegreeTwo hG) ?_ (by simpa using hq) (fun x => ?_) (fun v hv => ?_) h
   · intro x y hxy
     have h₁ : toV (isKept_leaf' hN hq2 x.2) = toV (isKept_leaf' hN hq2 y.2) := congrArg Subtype.val hxy
     exact Subtype.ext (hN.leaf_injective (eq_of_toV_leaf_eq hN h₁))
   · change ((suppressDegreeTwo (tildeGraph N q)).neighborSet _).ncard = 1
-    rw [ncard_neighborSet_suppressDegreeTwo hG]
+    rw [External.Allman2023.ncard_neighborSet_suppressDegreeTwo hG]
     exact nodeDegree_toV_leaf hN (isKept_leaf' hN hq2 x.2)
   · change 3 ≤ ((suppressDegreeTwo (tildeGraph N q)).neighborSet _).ncard
-    rw [ncard_neighborSet_suppressDegreeTwo hG]
+    rw [External.Allman2023.ncard_neighborSet_suppressDegreeTwo hG]
     have h₂ := two_le_nodeDegree hN v.1 fun x hx hk he => hv ⟨x, hx⟩ (Subtype.ext he)
     have h₃ := v.2
     omega
@@ -746,7 +747,7 @@ theorem false_of_star_of_cut (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel
   have hcc : ({u, v} : Finset {x // x ∈ q})ᶜ.card = 2 := by
     rw [card_compl, hcu]
     simp [hq]
-  rcases hst.card_of_mem_splits huniv hmem with h' | h' <;> omega
+  rcases External.Allman2023.card_of_mem_splits_of_hasStarTopology hst huniv hmem with h' | h' <;> omega
 
 /-- **On a treelike set of four taxa, `Q̃` "has form `ab|cd`" exactly when `ab|cd` is the cut-edge split.** `Q̃` is the literal tree
 with cherries `{a, b}`, `{c, d}`. -/
@@ -779,7 +780,7 @@ theorem qTilde_hasQuartetTopology_iff (hN : N.IsPhylogenetic) (hBin : N.IsBinary
       card_pair (hne' hcd)]
   constructor
   · intro hT
-    exact inducedCutSplit_of_mem_splits hN hBin hLevel hq ht h hqe (hT.pair_mem_splits huniv)
+    exact inducedCutSplit_of_mem_splits hN hBin hLevel hq ht h hqe (External.Allman2023.pair_mem_splits_of_hasQuartetTopology hT huniv)
   · intro hs
     rcases qTilde_hasStar_or_hasQuartet hN hBin hLevel hq ht hcard' with hst | h₁ | h₂ | h₃
     · exfalso
@@ -797,32 +798,44 @@ theorem qTilde_hasQuartetTopology_iff (hN : N.IsPhylogenetic) (hBin : N.IsBinary
         exact false_of_star_of_cut hN hBin hLevel hq ht huniv hst hc' hcut
     · exact h₁
     · exfalso
-      have hc' := card_acbd h
+      have hc' := External.Allman2023.card_acbd h
       have hq' : q = {a.1, c.1, b.1, d.1} := by
         refine hqe.trans ?_
         ext x
         simp only [mem_insert, mem_singleton]
         tauto
-      have hs' := inducedCutSplit_of_mem_splits hN hBin hLevel hq ht hc' hq' (h₂.pair_mem_splits (by
+      have hs' := inducedCutSplit_of_mem_splits hN hBin hLevel hq ht hc' hq' (External.Allman2023.pair_mem_splits_of_hasQuartetTopology h₂ (by
         intro x
         rcases huniv x with h' | h' | h' | h' <;> simp [h']))
-      refine quartetTree_ne_acbd h (eq_of_inducedCutSplit hN hs hs' ?_)
+      refine External.Allman2023.quartetTree_ne_acbd h (eq_of_inducedCutSplit hN hs hs' ?_)
       rw [quartetTree_taxa, quartetTree_taxa]
       exact hqe.symm.trans hq'
     · exfalso
-      have hc' := card_adbc h
+      have hc' := External.Allman2023.card_adbc h
       have hq' : q = {a.1, d.1, b.1, c.1} := by
         refine hqe.trans ?_
         ext x
         simp only [mem_insert, mem_singleton]
         tauto
-      have hs' := inducedCutSplit_of_mem_splits hN hBin hLevel hq ht hc' hq' (h₃.pair_mem_splits (by
+      have hs' := inducedCutSplit_of_mem_splits hN hBin hLevel hq ht hc' hq' (External.Allman2023.pair_mem_splits_of_hasQuartetTopology h₃ (by
         intro x
         rcases huniv x with h' | h' | h' | h' <;> simp [h']))
-      refine quartetTree_ne_adbc h (eq_of_inducedCutSplit hN hs hs' ?_)
+      refine External.Allman2023.quartetTree_ne_adbc h (eq_of_inducedCutSplit hN hs hs' ?_)
       rw [quartetTree_taxa, quartetTree_taxa]
       exact hqe.symm.trans hq'
 
 end TreeForm
+
+end Nanuq.Quartet
+
+/-! ### Former names
+
+The names under which lean4-ectoblob uses these declarations, in the namespace
+`External.AllmanBanosRhodes2019`: the definitions exported into it, and deprecated aliases of the
+theorems. -/
+
+namespace External.AllmanBanosRhodes2019.Quartet
+
+export Nanuq.Quartet (qTilde)
 
 end External.AllmanBanosRhodes2019.Quartet

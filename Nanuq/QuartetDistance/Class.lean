@@ -1,13 +1,13 @@
 module
 
-public import Nanuq.Proposition9Part2
-public import Nanuq.QuartetForm
+public import Nanuq.ConcordanceFactors.Proposition9Part2
+public import Nanuq.QuartetDistance.Form
 
 /-!
 # `networkClass`, `rho` and `networkDistance` are the source's
 
-The bridges of the definitions of `NANUQ.lean`, stated by cut edges and the grove, with the source's definitions by contraction
-(`QuartetContract.lean`).
+The bridges of the definitions of `Nanuq/Algorithm/Consistency.lean`, stated by cut edges and the grove, with the source's definitions by contraction
+(`Nanuq/QuartetDistance/Contract.lean`).
 
 * `rhoTilde`: `ρ_xy` of Definition 20 (line 1026), with the source's extension to a star tree (lines 1964-1968), on the graph `Q̃`.
 * `sourceDistance`: the distance `d_{Q,N⁻}` of Definition 22 (line 1125) with this `ρ_xy`.
@@ -27,7 +27,7 @@ open PhyloNetwork PhyloNetwork.Level1
 open Allman2023 Allman2023.TreeSuppression
 open scoped Classical
 
-namespace External.AllmanBanosRhodes2019.Quartet
+namespace Nanuq.Quartet
 
 variable {V E X : Type*}
 
@@ -351,7 +351,7 @@ theorem qTilde_tree_or_cycle (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel
     obtain ⟨_, _, _, _, _, _, _, y, _, _, _, D, -, -⟩ := exists_cycleData hN hBin hLevel hq ht
     exact ⟨_, _, _, _, D.hasFourCycleTopology hN hBin hLevel⟩
 
-/-- **`ρ_xy` of `NANUQ.lean` on `networkClass` is the source's on `Q̃`.** -/
+/-- **`ρ_xy` of `Nanuq/Algorithm/Consistency.lean` on `networkClass` is the source's on `Q̃`.** -/
 theorem rho_networkClass_eq (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel : IsLevelOne N) (hq : #q = 4) {x y : X} (hx : x ∈ q)
     (hy : y ∈ q) (hxy : x ≠ y) :
     rho (networkClass N q) x y = rhoTilde (qTilde hN (by omega : 2 ≤ #q)) ⟨x, hx⟩ ⟨y, hy⟩ := by
@@ -455,7 +455,7 @@ theorem rho_networkClass_eq (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel 
     rw [hright, hrhoLHS]
     simp only [rho, hsepiff]
 
-/-- **The theoretical distance of `NANUQ.lean` is the source's `d_{Q,N⁻}` of Definition 22.** -/
+/-- **The theoretical distance of `Nanuq/Algorithm/Consistency.lean` is the source's `d_{Q,N⁻}` of Definition 22.** -/
 theorem networkDistance_eq_sourceDistance (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel : IsLevelOne N) (x y : X) :
     networkDistance N x y = sourceDistance hN x y := by
   unfold networkDistance nanuqDistance sourceDistance
@@ -559,7 +559,7 @@ for the network multispecies coalescent at any `0 ≤ ρ ≤ 1`. `Q̃` is `qTild
    order `a, b, c, d`, then `CF_AB|CD > CF_AC|BD` and `CF_AD|BC > CF_AC|BD`."
 
 The statement is on four taxa of a whole network, the concordance factor being the marginal of the gene tree on all the taxa, as in
-`proposition9`. The source prints no proof: see `Proposition9.lean` and `Proposition9Part2.lean`. -/
+`proposition9`. The source prints no proof: see `Nanuq/ConcordanceFactors/Proposition9.lean` and `Nanuq/ConcordanceFactors/Proposition9Part2.lean`. -/
 theorem proposition9_source (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel : IsLevelOne N) {θ : MetricData E} (hθ : N.IsMetric θ)
     {ρ : ℝ} (hρ : 0 ≤ ρ ∧ ρ ≤ 1) (hq : #q = 4) {a b c d : {x // x ∈ q}} (h : ({a.1, b.1, c.1, d.1} : Finset X).card = 4)
     (h' : ({a.1, c.1, b.1, d.1} : Finset X).card = 4) (h'' : ({a.1, d.1, b.1, c.1} : Finset X).card = 4) :
@@ -584,9 +584,9 @@ theorem proposition9_source (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel 
   have hst' : (quartetTree a.1 c.1 b.1 d.1 h').taxa = q := (quartetTree_taxa _ _ _ _ _).trans hqe'.symm
   have hst'' : (quartetTree a.1 d.1 b.1 c.1 h'').taxa = q := (quartetTree_taxa _ _ _ _ _).trans hqe''.symm
   have halt₁ : quartetTree a.1 c.1 b.1 d.1 h' ∈ (quartetTree a.1 b.1 c.1 d.1 h).alternatives :=
-    QuartetTree.mem_alternatives.2 ⟨hst'.trans hst.symm, (quartetTree_ne_acbd h).symm⟩
+    QuartetTree.mem_alternatives.2 ⟨hst'.trans hst.symm, (External.Allman2023.quartetTree_ne_acbd h).symm⟩
   have halt₂ : quartetTree a.1 d.1 b.1 c.1 h'' ∈ (quartetTree a.1 b.1 c.1 d.1 h).alternatives :=
-    QuartetTree.mem_alternatives.2 ⟨hst''.trans hst.symm, (quartetTree_ne_adbc h).symm⟩
+    QuartetTree.mem_alternatives.2 ⟨hst''.trans hst.symm, (External.Allman2023.quartetTree_ne_adbc h).symm⟩
   have hcut : (qTilde hN (by omega : 2 ≤ #q)).HasQuartetTopology a b c d → InducedCutSplit N (quartetTree a.1 b.1 c.1 d.1 h) := by
     intro hT
     by_cases ht : IsTreelike N q
@@ -632,7 +632,7 @@ theorem proposition9_source (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel 
       have hse := QuartetClass.cycle.inj hcl
       rw [hse] at hmin
       have halt₃ : quartetTree a.1 b.1 c.1 d.1 h ∈ (quartetTree a.1 c.1 b.1 d.1 h').alternatives :=
-        QuartetTree.mem_alternatives.2 ⟨hst.trans hst'.symm, quartetTree_ne_acbd h⟩
+        QuartetTree.mem_alternatives.2 ⟨hst.trans hst'.symm, External.Allman2023.quartetTree_ne_acbd h⟩
       have hne₃ : quartetTree a.1 d.1 b.1 c.1 h'' ≠ quartetTree a.1 c.1 b.1 d.1 h' := by
         intro he
         have hv : ({{a.1, d.1}, {b.1, c.1}} : Finset (Finset X)) = {{a.1, c.1}, {b.1, d.1}} := congrArg Subtype.val he
@@ -656,4 +656,12 @@ theorem proposition9_source (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel 
 
 end Bridges
 
-end External.AllmanBanosRhodes2019.Quartet
+end Nanuq.Quartet
+
+/-! ### Former names
+
+The names under which lean4-ectoblob uses these declarations, in the namespace
+`External.AllmanBanosRhodes2019`: the definitions exported into it, and deprecated aliases of the
+theorems. -/
+
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.Quartet.proposition9_source := Nanuq.Quartet.proposition9_source

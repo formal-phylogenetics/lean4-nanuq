@@ -1,6 +1,6 @@
 module
 
-public import Nanuq.Proposition9
+public import Nanuq.ConcordanceFactors.Proposition9
 
 /-!
 # Proposition 9 of NANUQ, part 2
@@ -27,11 +27,11 @@ masses are tree-like towards `ab|cd` (`isTL_of_colocated`), so that this tree ha
 
 open Phylogenetics Phylogenetics.RootedNetwork Phylogenetics.NMSC Finset
 open PhyloNetwork PhyloNetwork.Level1
-open External.AllmanBanosRhodes2019.Placement
+open Nanuq.Placement
 open Phylogenetics.NMSC.Chain
 open scoped Classical
 
-namespace External.AllmanBanosRhodes2019
+namespace Nanuq
 
 variable {V E X : Type*} [Fintype V] [Fintype E] [Fintype X] [DecidableEq X]
 variable {N : RootedNetwork V E X} {θ : MetricData E} {ρ : ℝ}
@@ -763,7 +763,7 @@ theorem proposition9_part2 (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel :
       fun x hx y hy hxy hxA hyA => ?_
     exact hblock x (hsq ▸ hx) y (hsq ▸ hy) hxy (hnotb x hx hxA) (hnotb y hy hyA)
   · have hsum : ∑ r ∈ treesOn q, nmscCF N θ ρ r = 1 :=
-      QuartetTests.sum_displayCF_treesOn (isDist_geneTreeDist hN hθ hρ) (Tinnik.displaysOne_nmsc hN) hq
+      QuartetTests.sum_displayCF_treesOn (isDist_geneTreeDist hN hθ hρ) (External.Tinnik.displaysOne_nmsc hN) hq
     rcases cf_trichotomy hq hsum with huni | ⟨s', hs', hstrict⟩ | ⟨hno, -⟩
     · exact Or.inr huni
     · left
@@ -784,4 +784,12 @@ theorem proposition9_part2 (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel :
         · exact key r₁ hmem₁ h'
     · exact absurd hnull hno
 
-end External.AllmanBanosRhodes2019
+end Nanuq
+
+/-! ### Former names
+
+The names under which lean4-ectoblob uses these declarations, in the namespace
+`External.AllmanBanosRhodes2019`: the definitions exported into it, and deprecated aliases of the
+theorems. -/
+
+@[deprecated (since := "2026-11-25")] alias External.AllmanBanosRhodes2019.proposition9_part2 := Nanuq.proposition9_part2

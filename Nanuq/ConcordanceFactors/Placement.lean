@@ -8,7 +8,7 @@ public import PhyloNetwork.Wedge
 # Singleton lineages at given vertices: comparing the masses of the quartet trees
 
 Tools for the concordance factors of quartet trees on a network, for
-`src/External/AllmanBanosRhodes2019/Proposition9.lean`. A placement puts the four lineages of `q` as singletons at given
+`Nanuq/ConcordanceFactors/Proposition9.lean`. A placement puts the four lineages of `q` as singletons at given
 vertices (`placeInj`). `IsTL inj s` says that the masses are tree-like towards `s`: the alternatives of `s` have equal
 mass, at most that of `s`.
 
@@ -26,7 +26,7 @@ open Phylogenetics Phylogenetics.RootedNetwork Phylogenetics.NMSC Finset
 open Phylogenetics.NMSC.Chain
 open scoped Classical
 
-namespace External.AllmanBanosRhodes2019.Placement
+namespace Nanuq.Placement
 
 variable {V E X : Type*} [Fintype V] [Fintype E] [Fintype X] [DecidableEq X]
 variable {N : RootedNetwork V E X} {θ : MetricData E} {ρ : ℝ}
@@ -731,4 +731,4 @@ theorem cherryMass_one_reticulation (hN : N.IsPhylogenetic) (hθ : N.IsMetric θ
     · exact absurd rfl hfk
     · exact pairFn_right hne _ _
 
-end External.AllmanBanosRhodes2019.Placement
+end Nanuq.Placement

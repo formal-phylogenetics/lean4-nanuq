@@ -1,13 +1,13 @@
 module
 
-public import Nanuq.Proposition9
+public import Nanuq.ConcordanceFactors.Proposition9
 
 /-!
 # The source's induced quartet networks and types of cycle
 
 The source reads everything about four taxa on `N⁻`, the unrooted network of its Definition 4, through the quartet network
 of its Definition 5, and on it the `m_k`-cycles (line 399). This module defines them as printed, on a binary level-1 rooted
-network, and proves that `HasThreeTwoCycle` of `NANUQ.lean`, stated by blocks, is the source's `3₂`-cycle.
+network, and proves that `HasThreeTwoCycle` of `Nanuq/Algorithm/Consistency.lean`, stated by blocks, is the source's `3₂`-cycle.
 
 ## The definitions
 
@@ -24,7 +24,7 @@ network, and proves that `HasThreeTwoCycle` of `NANUQ.lean`, stated by blocks, i
 
 Representation. This module keeps `LSA(X)`, which Definition 4 suppresses: its two arcs stay, and a path of `N⁻` through the suppressed
 vertex is a path through it here. It is a vertex of degree two of `N⁻` before suppression, so that Definition 5 suppresses it in any case,
-if the arcs at it are kept (`keptDegree_lsa_le`). `QuartetSemidirected.lean` reads Definition 5 on `Allman2023.semidirected`, which is
+if the arcs at it are kept (`keptDegree_lsa_le`). `Nanuq/Networks/Semidirected.lean` reads Definition 5 on `Allman2023.semidirected`, which is
 `N⁻` with the suppression carried out, and proves that the two readings keep the same edges (`mem_sTrekEdges_iff`, `image_sTrekEdges`) and
 give each vertex the same degree (`sKeptDegree_eq`).
 
@@ -45,7 +45,7 @@ open Phylogenetics Phylogenetics.RootedNetwork Finset
 open PhyloNetwork PhyloNetwork.Level1
 open scoped Classical
 
-namespace External.AllmanBanosRhodes2019.Quartet
+namespace Nanuq.Quartet
 
 variable {V E X : Type*}
 
@@ -842,5 +842,17 @@ theorem hasThreeTwoCycle_iff (hN : N.IsPhylogenetic) (hBin : N.IsBinary) (hLevel
     omega
 
 end Cycle
+
+end Nanuq.Quartet
+
+/-! ### Former names
+
+The names under which lean4-ectoblob uses these declarations, in the namespace
+`External.AllmanBanosRhodes2019`: the definitions exported into it, and deprecated aliases of the
+theorems. -/
+
+namespace External.AllmanBanosRhodes2019.Quartet
+
+export Nanuq.Quartet (HasCycleType)
 
 end External.AllmanBanosRhodes2019.Quartet
