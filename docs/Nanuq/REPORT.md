@@ -160,4 +160,3 @@ search was made for NANUQ alone. No other formalization of NANUQ was found, and 
 - Proposition 10 for all level-1 networks, and Proposition 9 by the arguments of its references, Baños 2019 and
   Solís-Lemus, Ané 2016.
 - Rates: Theorem 36 is asymptotic, with no rate; a bound per test would give one, away from the centroid.
-- A private `NEXT.md` holds the candidate follow-up papers.

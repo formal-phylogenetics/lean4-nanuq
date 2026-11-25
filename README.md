@@ -126,7 +126,7 @@ From [Section 10 of the report](docs/Nanuq/REPORT.md#10-the-paper-in-the-literat
 
 ## What's next
 
-Steps 4 and 5, NeighborNet and the Circular Network algorithm with the splits graphs of circular split systems, would carry Theorem 36 from the distance to the network inferred; Proposition 10 is checked only on one network. [Section 11 of the report](docs/Nanuq/REPORT.md#11-whats-next) has these. A private `NEXT.md` holds the candidate follow-up papers.
+Steps 4 and 5, NeighborNet and the Circular Network algorithm with the splits graphs of circular split systems, would carry Theorem 36 from the distance to the network inferred; Proposition 10 is checked only on one network. [Section 11 of the report](docs/Nanuq/REPORT.md#11-whats-next) has these.
 
 ## Credits
 
