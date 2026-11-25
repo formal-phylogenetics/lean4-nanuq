@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/vltanh/lean4-nanuq/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/vltanh/lean4-nanuq/actions/workflows/lean_action_ci.yml)
 
-A Lean 4 formalization, in progress, of E. S. Allman, H. Baños, J. A. Rhodes, *NANUQ: a method for inferring species networks from gene trees under the coalescent model*, [Algorithms Mol. Biol. 14 (2019), 24](https://doi.org/10.1186/s13015-019-0159-2), read in arXiv v1 and the published text. NANUQ infers a level-1 species network from the gene trees of a sample. On each set of four taxa, two hypothesis tests on the counts of the three quartet trees decide between a star tree, a resolved quartet tree and a 4-cycle; a quartet distance built from these answers, NeighborNet and the Circular Network algorithm then give a splits graph, from which the network is read. The main result, Theorem 36, says that under the network multispecies coalescent on a binary level-1 network there are levels for the tests for which the algorithm recovers the network with probability tending to one as the number of gene trees grows.
+A Lean 4 formalization, in progress, of Elizabeth S. Allman, Hector Baños and John A. Rhodes (2019), "NANUQ: a method for inferring species networks from gene trees under the coalescent model", [Algorithms Mol. Biol. 14 (2019), 24](https://doi.org/10.1186/s13015-019-0159-2), read in arXiv v1 and the published text. NANUQ infers a level-1 species network from the gene trees of a sample. On each set of four taxa, two hypothesis tests on the counts of the three quartet trees decide between a star tree, a resolved quartet tree and a 4-cycle; a quartet distance built from these answers, NeighborNet and the Circular Network algorithm then give a splits graph, from which the network is read. The main result, Theorem 36, says that under the network multispecies coalescent on a binary level-1 network there are levels for the tests for which the algorithm recovers the network with probability tending to one as the number of gene trees grows.
 
 Formalized: Steps 2 and 3 of the algorithm, the tests and the distance; Theorem 36, down to the distance, which is what its proof shows; Proposition 9, which the paper takes from its references; and the definitions they need. Theorem 36 is false as printed (E1 of [the report](docs/Nanuq/REPORT.md#3-errors-and-gaps-in-the-paper)): it holds with no set of four taxa at the centroid concordance factor, and for generic parameters with the printed hypothesis. No result of the literature is assumed, and there is no `sorry` or `axiom` outside the Challenge's statements. Steps 4 and 5 and the paper's results on split systems and splits graphs are not formalized. No person has reviewed the proofs.
 
@@ -71,7 +71,7 @@ The statements of record are the theorems of the Challenge, [`palomar/Nanuq/Chal
 - [`scripts/Audit.lean`](scripts/Audit.lean) checks every declaration of this repository and of the libraries it requires, `Phylogenetics`, `PhyloNetwork`, `TreeOfBlobs`, `Allman2023` and `Tinnik`, including private and generated ones, against [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound), and writes the routes of the proofs.
 - [`scripts/route_check.py`](scripts/route_check.py) compares those routes with the paper's, in [`docs/Nanuq/paper_routes.tsv`](docs/Nanuq/paper_routes.tsv). The citations of the paper's own proofs are not recorded there yet, so it compares none.
 - Comparator checks that the Solution proves exactly the Challenge's statements, under Lean's kernel and NanoDa; [`scripts/check_kernels.sh`](scripts/check_kernels.sh) runs it, and con-ron on an export of the same theorems.
-- **No person has reviewed the proofs.**
+- No person has reviewed the proofs.
 
 ## Dependencies
 
@@ -130,10 +130,10 @@ Steps 4 and 5, NeighborNet and the Circular Network algorithm with the splits gr
 
 ## Credits
 
-- Requested and supervised by The-Anh Vu-Le, who chose the paper and decided the layout. **No person has reviewed the proofs.**
-- Claude (Opus 5.5) in Claude Code, with sub-agents, wrote the statements, proofs, audit and documents, following the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure.
-- Made in lean4-phylo-tree-of-blobs from 2026-10-31 to 2026-11-04, with the papers on the tree of blobs. [`docs/Nanuq/CREDITS.md`](docs/Nanuq/CREDITS.md) and lean4-phylo-tree-of-blobs's [`docs/CREDITS.md`](https://github.com/vltanh/lean4-phylo-tree-of-blobs/blob/6e7bc494d26f3d7096a17adffbfde1cf559f0ae9/docs/CREDITS.md) have the details.
+- Maintainer: The-Anh Vu-Le, who requested and supervised the formalization, chose the paper and decided the layout.
+- Formalization: Claude (Opus 5.5) in Claude Code, with sub-agents, wrote the statements, proofs, audit and documents, following the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure, in lean4-phylo-tree-of-blobs from 2026-10-31 to 2026-11-04 with the papers on the tree of blobs. [`docs/Nanuq/CREDITS.md`](docs/Nanuq/CREDITS.md) and lean4-phylo-tree-of-blobs's [`docs/CREDITS.md`](https://github.com/vltanh/lean4-phylo-tree-of-blobs/blob/6e7bc494d26f3d7096a17adffbfde1cf559f0ae9/docs/CREDITS.md) have the details.
+- Review: no person has reviewed the proofs; Lean's kernel checks them.
 
 ## License
 
-[Apache-2.0](LICENSE).
+Apache-2.0: [LICENSE](LICENSE).

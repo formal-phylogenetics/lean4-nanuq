@@ -4,23 +4,26 @@ version: "v0.4"
 project:
   name: "NANUQ: a method for inferring species networks from gene trees under the coalescent model"
   description: >-
-    A Lean formalization, in progress, of NANUQ (Allman, Baños, Rhodes 2019), which infers a level-1 species network
-    from gene tree quartets with hypothesis tests and a network quartet distance. No result of the literature is
-    assumed. No person has reviewed the proofs.
+    A Lean 4 formalization, in progress, of Elizabeth S. Allman, Hector Baños and John A. Rhodes
+    (2019), "NANUQ: a method for inferring species networks from gene trees under the coalescent
+    model", Algorithms Mol. Biol. 14 (2019), 24. NANUQ infers a level-1 species network from gene
+    tree quartets with hypothesis tests and a network quartet distance.
 
 
-    Proved: the statistical consistency of the algorithm (Theorem 36) down to the network quartet distance of its Step
-    3, which is what the paper's proof shows, with a correction of its hypothesis: as printed it allows the centroid
-    concordance factor, at which it fails; for generic parameters with the printed hypothesis; and with gene trees on
-    subsets of the taxa. Proposition 9, which the paper takes from its references, on binary level-1 networks, by an
-    argument of its own; the paper's definitions of the types of cycle, of the quartet network and of the distance,
-    with bridges to the library's; Theorem 17; the running time, with Steps 4 and 5 as costs. Not formalized: Steps 4 and 5
-    (NeighborNet, the Circular Network algorithm) and the results on split systems and splits graphs. The statements
-    of record are Theorem 36, corrected and for generic parameters, in the Challenge, on definitions in Mathlib's
-    vocabulary.
+    Proved: the statistical consistency of the algorithm (Theorem 36) down to the network quartet
+    distance of its Step 3, which is what the paper's proof shows, with a correction of its
+    hypothesis: as printed it allows the centroid concordance factor, at which it fails; for generic
+    parameters with the printed hypothesis; and with gene trees on subsets of the taxa. Proposition
+    9, which the paper takes from its references, on binary level-1 networks, by an argument of its
+    own; the paper's definitions of the types of cycle, of the quartet network and of the distance,
+    with bridges to the library's; Theorem 17; the running time, with Steps 4 and 5 as costs. Not
+    formalized: Steps 4 and 5 (NeighborNet, the Circular Network algorithm) and the results on split
+    systems and splits graphs. The statements of record are Theorem 36, corrected and for generic
+    parameters, in the Challenge, on definitions in Mathlib's vocabulary.
 
 
-    The audit records E1 to E4 on Theorem 36 and its proof, and E84 on Definition 11.
+    The audit records E1 to E4 on Theorem 36 and its proof, and E84 on Definition 11. No result of
+    the literature is assumed. No person has reviewed the proofs.
   authors:
     - "The-Anh Vu-Le"
   license: "Apache-2.0"
@@ -51,7 +54,10 @@ sources:
     type: "article"
     location: "https://doi.org/10.1214/19-EJS1576"
     relationship: "background"
-    note: "Cited for the T3 test of Step 2; the test and the bounds of its p-value that the proof of Theorem 36 uses are proved in lean4-phylo-network/PhyloNetwork/External/MitchellAllmanRhodes2019."
+    note: >-
+      Cited for the T3 test of Step 2; the test and the bounds of its p-value that the proof of
+      Theorem 36 uses are proved in
+      lean4-phylo-network/PhyloNetwork/External/MitchellAllmanRhodes2019.
   - title: "Topological metrizations of trees, and new quartet methods of tree inference"
     authors:
       - "John A. Rhodes"
@@ -59,7 +65,9 @@ sources:
     type: "article"
     location: "https://doi.org/10.1109/TCBB.2019.2917204"
     relationship: "background"
-    note: "Cited for the quartet distance on a tree; Theorem 2 is proved in lean4-phylo-network/PhyloNetwork/External/Rhodes2020, and gives the paper's Theorem 17 here."
+    note: >-
+      Cited for the quartet distance on a tree; Theorem 2 is proved in
+      lean4-phylo-network/PhyloNetwork/External/Rhodes2020, and gives the paper's Theorem 17 here.
   - title: "Identifying species network features from gene tree quartets under the coalescent model"
     authors:
       - "Hector Baños"
@@ -67,7 +75,10 @@ sources:
     type: "article"
     location: "https://doi.org/10.1007/s11538-018-0485-4"
     relationship: "background"
-    note: "Cited, with Solís-Lemus and Ané 2016, for Proposition 9, which the paper states with no proof. Not read and not used: Proposition 9 is proved here, in the paper's terms, by an argument of its own (Nanuq.proposition9, Nanuq.proposition9_part2)."
+    note: >-
+      Cited, with Solís-Lemus and Ané 2016, for Proposition 9, which the paper states with no proof.
+      Not read and not used: Proposition 9 is proved here, in the paper's terms, by an argument of
+      its own (Nanuq.proposition9, Nanuq.proposition9_part2).
   - title: "The tree of blobs of a species network: identifiability under the coalescent"
     authors:
       - "Elizabeth S. Allman"
@@ -78,7 +89,11 @@ sources:
     type: "article"
     location: "https://doi.org/10.1007/s00285-022-01838-9"
     relationship: "background"
-    note: "Not cited by the paper, which is earlier; the formalization reads the paper's semidirected network and quartet networks in its language. It is formalized in its own repository, lean4-allman2023; the facts the proofs use are stated in Nanuq/External/Allman2023 and proved from that repository's theorems, which the directory's README names."
+    note: >-
+      Not cited by the paper, which is earlier; the formalization reads the paper's semidirected
+      network and quartet networks in its language. It is formalized in its own repository,
+      lean4-allman2023; the facts the proofs use are stated in Nanuq/External/Allman2023 and proved
+      from that repository's theorems, which the directory's README names.
   - title: "TINNiK: inference of the tree of blobs of a species network under the coalescent model"
     authors:
       - "Elizabeth S. Allman"
@@ -89,7 +104,11 @@ sources:
     type: "article"
     location: "https://doi.org/10.1186/s13015-024-00266-2"
     relationship: "background"
-    note: "Not cited by the paper, which is earlier; the proof of Theorem 36 runs the argument of TINNiK's Theorem 4 for the same tests. It is formalized in its own repository, lean4-tinnik; the steps the proofs use are stated in Nanuq/External/Tinnik and proved from that repository's theorems."
+    note: >-
+      Not cited by the paper, which is earlier; the proof of Theorem 36 runs the argument of
+      TINNiK's Theorem 4 for the same tests. It is formalized in its own repository, lean4-tinnik;
+      the steps the proofs use are stated in Nanuq/External/Tinnik and proved from that repository's
+      theorems.
   - title: "When are quarnets sufficient to reconstruct semi-directed phylogenetic networks?"
     authors:
       - "Katharina T. Huber"
@@ -101,23 +120,31 @@ sources:
     type: "article"
     location: "https://doi.org/10.1007/s11538-025-01510-5"
     relationship: "background"
-    note: "Not cited by the paper; the forward direction of its Theorem 5.1, proved in lean4-phylo-network/PhyloNetwork/External/HuberEtAl2025, is used in the proof of Proposition 9 here."
+    note: >-
+      Not cited by the paper; the forward direction of its Theorem 5.1, proved in
+      lean4-phylo-network/PhyloNetwork/External/HuberEtAl2025, is used in the proof of Proposition 9
+      here.
 
 related_formalizations:
   - id: "https://github.com/vltanh/lean4-phylogenetics"
     relationship: "adapts"
-    note: "This repository imports this library, pinned at commit 3fcabfd, for its definitions and general results; the Challenge restates the definitions it needs in Mathlib's vocabulary, and Nanuq/Bridge proves that they are the library's."
+    note: >-
+      This repository imports this library, pinned at commit 3fcabfd, for its definitions and
+      general results; the Challenge restates the definitions it needs in Mathlib's vocabulary, and
+      Nanuq/Bridge proves that they are the library's.
 
 status:
   scope: >-
-    In progress, and unconditional: no result of the literature is assumed. Proved: Theorem 36 down to the distance of
-    Step 3, corrected (E1) and for generic parameters, with gene trees on subsets of the taxa; Proposition 9 (all three
-    parts) on binary level-1 networks; Definitions 4, 5, 20 and 22 with their bridges; Theorem 17; the running time as a
-    count of operations, with Steps 4 and 5 as costs. Not formalized: Steps 4 and 5 and the reading of the output's splits graph,
-    the results on split systems and splits graphs (Theorems 15, 23, 34, Corollaries 16, 24, 31, 35, Lemmas 19, 21,
-    25-28, 32, 33, Proposition 30), Proposition 10 beyond the printed formula and one network, the examples and the
-    data analyses. The Challenge states Theorem 36, the paper's main result, corrected and for generic parameters; the
-    other results are in the library. See Section 9 of docs/Nanuq/REPORT.md.
+    In progress, and unconditional: no result of the literature is assumed. Proved: Theorem 36 down
+    to the distance of Step 3, corrected (E1) and for generic parameters, with gene trees on subsets
+    of the taxa; Proposition 9 (all three parts) on binary level-1 networks; Definitions 4, 5, 20
+    and 22 with their bridges; Theorem 17; the running time as a count of operations, with Steps 4
+    and 5 as costs. Not formalized: Steps 4 and 5 and the reading of the output's splits graph, the
+    results on split systems and splits graphs (Theorems 15, 23, 34, Corollaries 16, 24, 31, 35,
+    Lemmas 19, 21, 25-28, 32, 33, Proposition 30), Proposition 10 beyond the printed formula and one
+    network, the examples and the data analyses. The Challenge states Theorem 36, the paper's main
+    result, corrected and for generic parameters; the other results are in the library. See Section
+    9 of docs/Nanuq/REPORT.md.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: []
@@ -125,7 +152,8 @@ status:
 automation:
   methods:
     - method: "agent"
-      models: ["claude-opus-5-5"]
+      models:
+        - "claude-opus-5-5"
       framework: "Claude Code"
       tool_setup: "formalize-math-paper skill, repository vltanh/formalize-math-paper; sub-agents. The formalization was made in lean4-phylo-tree-of-blobs with the papers on the tree of blobs, from 2026-10-31 to 2026-11-04, and moved to this repository on 2026-11-21; the layout of the collection and the Challenge on 2026-11-25."
       cost:
@@ -135,30 +163,34 @@ automation:
       prompting_notes: "The user asked for the papers on the tree of blobs and the sources they cite, then for each paper to move to a repository of its own, and for the layout of the collection."
   spend_usd: "not tracked"
   notes: >-
-    The user chose the paper and decided the layout. AI systems wrote the code, the statements, the audit and the
-    documents. Nanuq/ is the library; the audit checks every declaration of this repository and of the libraries it
-    requires, all on the standard axioms. See docs/Nanuq/CREDITS.md.
+    The user chose the paper and decided the layout. AI systems wrote the code, the statements, the
+    audit and the documents. Nanuq/ is the library; the audit checks every declaration of this
+    repository and of the libraries it requires, all on the standard axioms. See
+    docs/Nanuq/CREDITS.md.
 
 fidelity:
   divergences: >-
-    Statement corrected (Section 3 of docs/Nanuq/REPORT.md): Theorem 36 needs that no set of four taxa has the centroid
-    concordance factor (E1); the Challenge states it with this hypothesis, and for generic parameters with the printed
-    one. Readings (Section 6 of the report): Theorem 36 concludes at the distance of Step 3, which is what its proof
-    shows; Proposition 9 is stated on a set of four taxa of a whole network, with the paper's form proved equivalent.
+    Statement corrected (Section 3 of docs/Nanuq/REPORT.md): Theorem 36 needs that no set of four
+    taxa has the centroid concordance factor (E1); the Challenge states it with this hypothesis, and
+    for generic parameters with the printed one. Readings (Section 6 of the report): Theorem 36
+    concludes at the distance of Step 3, which is what its proof shows; Proposition 9 is stated on a
+    set of four taxa of a whole network, with the paper's form proved equivalent.
 
 
-    Departures from the paper's proofs, in Section 7 of the report: Proposition 9 has no printed proof and is proved by
-    an argument of its own; the proof of Theorem 36 takes the maximum of other levels, since the printed minimum of
-    undetermined levels does not work (E2, E3). The routes of the paper's proofs are not recorded yet.
+    Departures from the paper's proofs, in Section 7 of the report: Proposition 9 has no printed
+    proof and is proved by an argument of its own; the proof of Theorem 36 takes the maximum of
+    other levels, since the printed minimum of undetermined levels does not work (E2, E3). The
+    routes of the paper's proofs are not recorded yet.
 
 review:
   status: "agent-reviewed"
   reviewers:
     - "none (no human review)"
   notes: >-
-    Independent AI agents reviewed the statements of the papers formalized in lean4-phylo-tree-of-blobs against the sources. The axiom
-    audit and the Challenge's copy of the definitions are checked locally, and Comparator (Lean's kernel and NanoDa)
-    and con-ron run through scripts/check_kernels.sh.
+    Independent AI agents reviewed the statements against the sources in lean4-phylo-tree-of-blobs,
+    with those of the other papers formalized there. The axiom audit and the Challenge's copy of the
+    definitions are checked locally, and Comparator (Lean's kernel and NanoDa) and con-ron run
+    through scripts/check_kernels.sh.
 
 alignment:
   namespace: "NanuqChallenge"
@@ -167,11 +199,16 @@ alignment:
       lean: "NanuqChallenge.theorem36"
       module: "Nanuq.Challenge"
       status: "proved"
-      note: "Down to the distance of Step 3, with the hypothesis NoCentroidCF (E1). The library's Nanuq.theorem36_output gives the steps after the distance; Nanuq.theorem36_missing, gene trees on subsets of the taxa; Nanuq.ThreeTwo.not_theorem36AsPrinted_N₃ the failure as printed."
+      note: >-
+        Down to the distance of Step 3, with the hypothesis NoCentroidCF (E1). The library's
+        Nanuq.theorem36_output gives the steps after the distance; Nanuq.theorem36_missing, gene
+        trees on subsets of the taxa; Nanuq.ThreeTwo.not_theorem36AsPrinted_N₃ the failure as
+        printed.
     - source: "NANUQ, Theorem 36, for generic parameters"
       lean: "NanuqChallenge.theorem36_generic"
       module: "Nanuq.Challenge"
       status: "proved"
-      note: "With the hypothesis as printed, off a null set of parameters, for the distance of Step 3."
+      note: >-
+        With the hypothesis as printed, off a null set of parameters, for the distance of Step 3.
 
-acknowledgements: "Lean, Mathlib; the libraries of the collection (lean4-phylogenetics, lean4-phylo-network) and the repositories lean4-allman2023 and lean4-tinnik; the authors of the paper and its sources."
+acknowledgements: "Lean and Mathlib; the libraries of the collection, lean4-phylogenetics (its definitions and general results) and lean4-phylo-network (Mitchell et al. 2019, Rhodes 2020, Huber et al. 2025), and the repositories lean4-allman2023 and lean4-tinnik (the facts of Allman et al. 2023 and the steps of TINNiK that the proofs use); the authors of the paper and of its sources."
