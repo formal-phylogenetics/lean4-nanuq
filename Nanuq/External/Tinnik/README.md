@@ -2,7 +2,7 @@
 
 Source: E. S. Allman, H. Baños, J. D. Mitchell, J. A. Rhodes, *TINNiK: inference of the tree of blobs of a
 species network under the coalescent model*, Algorithms Mol. Biol. 19 (2024), 23,
-<https://doi.org/10.1186/s13015-024-00266-2>. It is a paper of the hub lean4-tob, formalized in its own
+<https://doi.org/10.1186/s13015-024-00266-2>. It is a paper of the hub lean4-phylo-tree-of-blobs, formalized in its own
 repository, [lean4-tinnik](https://github.com/vltanh/lean4-tinnik), which this repository requires; its
 [report](https://github.com/vltanh/lean4-tinnik/blob/main/docs/Tinnik/REPORT.md) is the audit of the
 source.

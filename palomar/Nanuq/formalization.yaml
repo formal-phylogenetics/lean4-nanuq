@@ -127,9 +127,9 @@ automation:
     - method: "agent"
       models: ["claude-opus-5-5"]
       framework: "Claude Code"
-      tool_setup: "formalize-math-paper skill, repository vltanh/formalize-math-paper; sub-agents. The formalization was made in lean4-tob with the papers on the tree of blobs, from 2026-10-31 to 2026-11-04, and moved to this repository on 2026-11-21; the layout of the collection and the Challenge on 2026-11-25."
+      tool_setup: "formalize-math-paper skill, repository vltanh/formalize-math-paper; sub-agents. The formalization was made in lean4-phylo-tree-of-blobs with the papers on the tree of blobs, from 2026-10-31 to 2026-11-04, and moved to this repository on 2026-11-21; the layout of the collection and the Challenge on 2026-11-25."
       cost:
-        wall_time: "not tracked for this paper alone: lean4-tob's docs/CREDITS.md at 6e7bc49 gives the figures of the whole project, which are not separated by paper"
+        wall_time: "not tracked for this paper alone: lean4-phylo-tree-of-blobs's docs/CREDITS.md at 6e7bc49 gives the figures of the whole project, which are not separated by paper"
         spend_usd: "not tracked"
         hardware: "local machine"
       prompting_notes: "The user asked for the papers on the tree of blobs and the sources they cite, then for each paper to move to a repository of its own, and for the layout of the collection."
@@ -156,7 +156,7 @@ review:
   reviewers:
     - "none (no human review)"
   notes: >-
-    Independent AI agents reviewed the statements of the papers formalized in lean4-tob against the sources. The axiom
+    Independent AI agents reviewed the statements of the papers formalized in lean4-phylo-tree-of-blobs against the sources. The axiom
     audit and the Challenge's copy of the definitions are checked locally, and Comparator (Lean's kernel and NanoDa)
     and con-ron run through scripts/check_kernels.sh.
 
