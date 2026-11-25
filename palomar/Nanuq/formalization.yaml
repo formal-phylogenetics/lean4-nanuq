@@ -126,7 +126,7 @@ sources:
       here.
 
 related_formalizations:
-  - id: "https://github.com/vltanh/lean4-phylogenetics"
+  - id: "https://github.com/formal-phylogenetics/lean4-phylogenetics"
     relationship: "adapts"
     note: >-
       This repository imports this library, pinned at commit 3fcabfd, for its definitions and

@@ -1,12 +1,12 @@
 # NANUQ: inferring species networks from gene trees, in Lean
 
-[![CI](https://github.com/vltanh/lean4-nanuq/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/vltanh/lean4-nanuq/actions/workflows/lean_action_ci.yml)
+[![CI](https://github.com/formal-phylogenetics/lean4-nanuq/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/formal-phylogenetics/lean4-nanuq/actions/workflows/lean_action_ci.yml)
 
 A Lean 4 formalization, in progress, of Elizabeth S. Allman, Hector Baños and John A. Rhodes (2019), "NANUQ: a method for inferring species networks from gene trees under the coalescent model", [Algorithms Mol. Biol. 14 (2019), 24](https://doi.org/10.1186/s13015-019-0159-2), read in arXiv v1 and the published text. NANUQ infers a level-1 species network from the gene trees of a sample. On each set of four taxa, two hypothesis tests on the counts of the three quartet trees decide between a star tree, a resolved quartet tree and a 4-cycle; a quartet distance built from these answers, NeighborNet and the Circular Network algorithm then give a splits graph, from which the network is read. The main result, Theorem 36, says that under the network multispecies coalescent on a binary level-1 network there are levels for the tests for which the algorithm recovers the network with probability tending to one as the number of gene trees grows.
 
 Formalized: Steps 2 and 3 of the algorithm, the tests and the distance; Theorem 36, down to the distance, which is what its proof shows; Proposition 9, which the paper takes from its references; and the definitions they need. Theorem 36 is false as printed (E1 of [the report](docs/Nanuq/REPORT.md#3-errors-and-gaps-in-the-paper)): it holds with no set of four taxa at the centroid concordance factor, and for generic parameters with the printed hypothesis. No result of the literature is assumed, and there is no `sorry` or `axiom` outside the Challenge's statements. Steps 4 and 5 and the paper's results on split systems and splits graphs are not formalized. No person has reviewed the proofs.
 
-This paper belongs to the hub [lean4-phylo-network](https://github.com/vltanh/lean4-phylo-network), on phylogenetic network estimation, in the collection rooted at [lean4-phylogenetics](https://github.com/vltanh/lean4-phylogenetics). It builds on Baños 2019, whose repository [lean4-banos2019](https://github.com/vltanh/lean4-banos2019) is in progress, and its formalization uses the language of Allman et al. 2023 and the tests of TINNiK, formalized in [lean4-allman2023](https://github.com/vltanh/lean4-allman2023) and [lean4-tinnik](https://github.com/vltanh/lean4-tinnik). NANUQ⁺ and ECToBlob build on it.
+This paper belongs to the hub [lean4-phylo-network](https://github.com/formal-phylogenetics/lean4-phylo-network), on phylogenetic network estimation, in the collection rooted at [lean4-phylogenetics](https://github.com/formal-phylogenetics/lean4-phylogenetics). It builds on Baños 2019, whose repository [lean4-banos2019](https://github.com/formal-phylogenetics/lean4-banos2019) is in progress, and its formalization uses the language of Allman et al. 2023 and the tests of TINNiK, formalized in [lean4-allman2023](https://github.com/formal-phylogenetics/lean4-allman2023) and [lean4-tinnik](https://github.com/formal-phylogenetics/lean4-tinnik). NANUQ⁺ and ECToBlob build on it.
 
 ## Status
 
@@ -76,9 +76,9 @@ The statements of record are the theorems of the Challenge, [`palomar/Nanuq/Chal
 ## Dependencies
 
 - [Mathlib](https://github.com/leanprover-community/mathlib4), at `v4.37.0-rc1`.
-- [lean4-phylogenetics](https://github.com/vltanh/lean4-phylogenetics), the library of the collection, pinned by commit in [`lakefile.toml`](lakefile.toml): networks, trees and quartets, the network multispecies coalescent, generic parameters.
-- [lean4-phylo-network](https://github.com/vltanh/lean4-phylo-network), the library of this paper's hub, pinned by commit: the hypothesis tests and their limit laws, independent samples, blobs, blocks and wedge paths of level-1 networks, and the sources Mitchell et al. 2019, Rhodes 2020 and Huber et al. 2025.
-- [lean4-allman2023](https://github.com/vltanh/lean4-allman2023) and [lean4-tinnik](https://github.com/vltanh/lean4-tinnik), pinned by commit, whose results the proofs use through the statements of [`Nanuq/External/`](Nanuq/External). They require [lean4-phylo-tree-of-blobs](https://github.com/vltanh/lean4-phylo-tree-of-blobs), which this repository does not use directly.
+- [lean4-phylogenetics](https://github.com/formal-phylogenetics/lean4-phylogenetics), the library of the collection, pinned by commit in [`lakefile.toml`](lakefile.toml): networks, trees and quartets, the network multispecies coalescent, generic parameters.
+- [lean4-phylo-network](https://github.com/formal-phylogenetics/lean4-phylo-network), the library of this paper's hub, pinned by commit: the hypothesis tests and their limit laws, independent samples, blobs, blocks and wedge paths of level-1 networks, and the sources Mitchell et al. 2019, Rhodes 2020 and Huber et al. 2025.
+- [lean4-allman2023](https://github.com/formal-phylogenetics/lean4-allman2023) and [lean4-tinnik](https://github.com/formal-phylogenetics/lean4-tinnik), pinned by commit, whose results the proofs use through the statements of [`Nanuq/External/`](Nanuq/External). They require [lean4-phylo-tree-of-blobs](https://github.com/formal-phylogenetics/lean4-phylo-tree-of-blobs), which this repository does not use directly.
 
 ## Palomar
 
@@ -131,7 +131,7 @@ Steps 4 and 5, NeighborNet and the Circular Network algorithm with the splits gr
 ## Credits
 
 - Maintainer: The-Anh Vu-Le, who requested and supervised the formalization, chose the paper and decided the layout.
-- Formalization: Claude (Opus 5.5) in Claude Code, with sub-agents, wrote the statements, proofs, audit and documents, following the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure, in lean4-phylo-tree-of-blobs from 2026-10-31 to 2026-11-04 with the papers on the tree of blobs. [`docs/Nanuq/CREDITS.md`](docs/Nanuq/CREDITS.md) and lean4-phylo-tree-of-blobs's [`docs/CREDITS.md`](https://github.com/vltanh/lean4-phylo-tree-of-blobs/blob/6e7bc494d26f3d7096a17adffbfde1cf559f0ae9/docs/CREDITS.md) have the details.
+- Formalization: Claude (Opus 5.5) in Claude Code, with sub-agents, wrote the statements, proofs, audit and documents, following the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure, in lean4-phylo-tree-of-blobs from 2026-10-31 to 2026-11-04 with the papers on the tree of blobs. [`docs/Nanuq/CREDITS.md`](docs/Nanuq/CREDITS.md) and lean4-phylo-tree-of-blobs's [`docs/CREDITS.md`](https://github.com/formal-phylogenetics/lean4-phylo-tree-of-blobs/blob/6e7bc494d26f3d7096a17adffbfde1cf559f0ae9/docs/CREDITS.md) have the details.
 - Review: no person has reviewed the proofs; Lean's kernel checks them.
 
 ## License

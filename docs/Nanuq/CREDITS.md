@@ -5,10 +5,10 @@ NANUQ (Allman, Baños, Rhodes 2019), in Lean.
 - **Maintainer:** The-Anh Vu-Le, who chose the paper and decided the layout. **No person has reviewed the proofs.**
 - **Formalization:** Claude (Opus 5.5) in Claude Code, with sub-agents, following the
   [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure. NANUQ was formalized in
-  [lean4-phylo-tree-of-blobs](https://github.com/vltanh/lean4-phylo-tree-of-blobs) from 2026-10-31 to 2026-11-04, as a source that ECToBlob's
+  [lean4-phylo-tree-of-blobs](https://github.com/formal-phylogenetics/lean4-phylo-tree-of-blobs) from 2026-10-31 to 2026-11-04, as a source that ECToBlob's
   Remark 8.3 cites, with the papers on the tree of blobs. The rounds, the agents and models, and the time and effort of
   each are in lean4-phylo-tree-of-blobs's
-  [`docs/CREDITS.md`](https://github.com/vltanh/lean4-phylo-tree-of-blobs/blob/6e7bc494d26f3d7096a17adffbfde1cf559f0ae9/docs/CREDITS.md),
+  [`docs/CREDITS.md`](https://github.com/formal-phylogenetics/lean4-phylo-tree-of-blobs/blob/6e7bc494d26f3d7096a17adffbfde1cf559f0ae9/docs/CREDITS.md),
   at the last commit before the split; they are not separated by paper.
 - **Moved to this repository** on 2026-11-21, by Claude (Opus 5.5) in Claude Code, when lean4-phylo-tree-of-blobs became the hub of
   its papers, with every declaration's name and type kept, checked against lean4-phylo-tree-of-blobs at commit `6e7bc49`.

@@ -28,7 +28,7 @@ ECToBlob's Remark 8.3 says that the argument of its Theorem 8.2 strengthens the 
 ## What is formalized (`Algorithm/Consistency.lean`)
 
 * Step 2 of the algorithm: [`classify`](Algorithm/Consistency.lean#L95), with the star test and the T3 test at levels `β`, `α`. Its printed statistics are
-  [`starStat`](https://github.com/vltanh/lean4-phylo-network/blob/4ed2bb0f7085acbf1326f43e2a5c582ba4566125/PhyloNetwork/Testing/Defs.lean#L52) and [`t3Stat`](https://github.com/vltanh/lean4-phylo-network/blob/4ed2bb0f7085acbf1326f43e2a5c582ba4566125/PhyloNetwork/External/MitchellAllmanRhodes2019/T3Test.lean#L60) ([`starStat_eq_printed`](Algorithm/Consistency.lean#L309), [`t3Stat_eq_printed`](Algorithm/Consistency.lean#L343)).
+  [`starStat`](https://github.com/formal-phylogenetics/lean4-phylo-network/blob/4ed2bb0f7085acbf1326f43e2a5c582ba4566125/PhyloNetwork/Testing/Defs.lean#L52) and [`t3Stat`](https://github.com/formal-phylogenetics/lean4-phylo-network/blob/4ed2bb0f7085acbf1326f43e2a5c582ba4566125/PhyloNetwork/External/MitchellAllmanRhodes2019/T3Test.lean#L60) ([`starStat_eq_printed`](Algorithm/Consistency.lean#L309), [`t3Stat_eq_printed`](Algorithm/Consistency.lean#L343)).
 * Step 3, the network quartet distance of Definition 22 with the source's extension to star trees: `rho`,
   [`nanuqDistance`](Algorithm/Consistency.lean#L113). It is not TINNiK's distance: they differ at `x ≠ y` by the number of 4-cycles with `x, y` adjacent
   ([`quartetDistance_sub_nanuqDistance`](Algorithm/Consistency.lean#L746)), and agree without 4-cycles ([`nanuqDistance_eq_quartetDistance`](Algorithm/Consistency.lean#L800)). On a tree it is
@@ -42,7 +42,7 @@ ECToBlob's Remark 8.3 says that the argument of its Theorem 8.2 strengthens the 
 
 * Proposition 9, parts 1 and 3, on binary level-1 networks, at any `0 ≤ ρ ≤ 1`: [`proposition9`](ConcordanceFactors/Proposition9.lean#L1500). The source takes it from
   its references and prints no proof, so the proof is new. It uses the facts on blobs of level-1 networks in
-  lean4-phylo-network ([`PhyloNetwork.Level1Blobs`](https://github.com/vltanh/lean4-phylo-network/blob/4ed2bb0f7085acbf1326f43e2a5c582ba4566125/PhyloNetwork/Level1Blobs.lean), [`PhyloNetwork.Wedge`](https://github.com/vltanh/lean4-phylo-network/blob/4ed2bb0f7085acbf1326f43e2a5c582ba4566125/PhyloNetwork/Wedge.lean), [`PhyloNetwork.Level1Blocks`](https://github.com/vltanh/lean4-phylo-network/blob/4ed2bb0f7085acbf1326f43e2a5c582ba4566125/PhyloNetwork/Level1Blocks.lean)), and Theorem 5.1 of
+  lean4-phylo-network ([`PhyloNetwork.Level1Blobs`](https://github.com/formal-phylogenetics/lean4-phylo-network/blob/4ed2bb0f7085acbf1326f43e2a5c582ba4566125/PhyloNetwork/Level1Blobs.lean), [`PhyloNetwork.Wedge`](https://github.com/formal-phylogenetics/lean4-phylo-network/blob/4ed2bb0f7085acbf1326f43e2a5c582ba4566125/PhyloNetwork/Wedge.lean), [`PhyloNetwork.Level1Blocks`](https://github.com/formal-phylogenetics/lean4-phylo-network/blob/4ed2bb0f7085acbf1326f43e2a5c582ba4566125/PhyloNetwork/Level1Blocks.lean)), and Theorem 5.1 of
   Huber et al. 2025. It places lineages at vertices (`Placement.placeInj`) and moves them up by the Markov property; it
   has no formula in the branch lengths. [`ConcordanceFactors/Proposition9.lean`](ConcordanceFactors/Proposition9.lean) has the argument.
 * Proposition 9, part 2: [`proposition9_part2`](ConcordanceFactors/Proposition9Part2.lean#L725), in [`ConcordanceFactors/Proposition9Part2.lean`](ConcordanceFactors/Proposition9Part2.lean), with the bound
@@ -55,14 +55,14 @@ ECToBlob's Remark 8.3 says that the argument of its Theorem 8.2 strengthens the 
 
 ## What is formalized (`Algorithm/MissingTaxa.lean`, `Algorithm/Counts.lean`)
 
-* Gene trees on subsets of the taxa, as the source's input says: the counts of Step 1 are [`Phylogenetics.quartetCountOn`](https://github.com/vltanh/lean4-phylo-network/blob/4ed2bb0f7085acbf1326f43e2a5c582ba4566125/PhyloNetwork/Testing/MissingTaxa.lean#L46),
+* Gene trees on subsets of the taxa, as the source's input says: the counts of Step 1 are [`Phylogenetics.quartetCountOn`](https://github.com/formal-phylogenetics/lean4-phylo-network/blob/4ed2bb0f7085acbf1326f43e2a5c582ba4566125/PhyloNetwork/Testing/MissingTaxa.lean#L46),
   and [`theorem36_missing`](Algorithm/MissingTaxa.lean#L196), [`theorem36_generic_missing`](Algorithm/MissingTaxa.lean#L211) are the theorem when each set of four taxa is on more and more
-  gene trees ([`Tinnik.Covers`](https://github.com/vltanh/lean4-tinnik/blob/de514e1f14522531f16dcdfa12244fe72fe05944/Tinnik/Consistency/MissingTaxa.lean#L97)). The source does not state this.
+  gene trees ([`Tinnik.Covers`](https://github.com/formal-phylogenetics/lean4-tinnik/blob/de514e1f14522531f16dcdfa12244fe72fe05944/Tinnik/Consistency/MissingTaxa.lean#L97)). The source does not state this.
 * The running time: [`nanuqOperations_le`](Algorithm/Counts.lean#L35), `O(n⁴ m)`, with Steps 4 and 5 as costs bounded as the source says.
 
 ## What is a hypothesis
 
-[`Nanuq.theorem36`](Algorithm/Theorem36.lean#L53) has two: [`ThreeTwoTreelike`](Algorithm/Consistency.lean#L1186), the hypothesis as printed, and [`Tinnik.NoCentroidCF`](https://github.com/vltanh/lean4-tinnik/blob/de514e1f14522531f16dcdfa12244fe72fe05944/Tinnik/Consistency/Theorem4.lean#L334), the correction below.
+[`Nanuq.theorem36`](Algorithm/Theorem36.lean#L53) has two: [`ThreeTwoTreelike`](Algorithm/Consistency.lean#L1186), the hypothesis as printed, and [`Tinnik.NoCentroidCF`](https://github.com/formal-phylogenetics/lean4-tinnik/blob/de514e1f14522531f16dcdfa12244fe72fe05944/Tinnik/Consistency/Theorem4.lean#L334), the correction below.
 [`Nanuq.theorem36_generic`](Algorithm/Theorem36.lean#L81) has only the first.
 
 [`theorem36_output`](Algorithm/Theorem36.lean#L69) also has the hypothesis that the steps after the distance return the wanted object on the theoretical
@@ -73,12 +73,12 @@ distance. That is what the source's Theorem 34, Corollary 24 and its references 
 The source reads the types of cycle and `Q̃` on `N⁻` and `N_c⁻`. These are defined as printed, on a binary level-1 network:
 
 * Definition 5: [`Quartet.trekArcs`](Networks/QuartetNetwork.lean#L86), the edges in simple treks of `N⁻`. [`Quartet.trekArcs_eq_wedgeArcs`](Networks/QuartetNetwork.lean#L293): these are the
-  arcs of TOB-QMC's subnetwork, [`RootedNetwork.wedgeArcs`](https://github.com/vltanh/lean4-phylo-network/blob/4ed2bb0f7085acbf1326f43e2a5c582ba4566125/PhyloNetwork/Wedge.lean#L87), for every network, since a simple semidirected trek is a
+  arcs of TOB-QMC's subnetwork, [`RootedNetwork.wedgeArcs`](https://github.com/formal-phylogenetics/lean4-phylo-network/blob/4ed2bb0f7085acbf1326f43e2a5c582ba4566125/PhyloNetwork/Wedge.lean#L87), for every network, since a simple semidirected trek is a
   directed one.
 * `m_k`-cycles (line 399): [`Quartet.HasCycleType`](Networks/QuartetNetwork.lean#L108), with [`Quartet.cycleSize`](Networks/QuartetNetwork.lean#L100) the number of vertices of the cycle of degree
   other than two in the graph of the kept edges.
 * `Q̃` (Definition 20): [`Quartet.tildeGraph`](QuartetDistance/Contract.lean#L65), the contraction of the 2- and 3-cycles, and [`Quartet.qTilde`](QuartetDistance/Contract.lean#L423), with
-  [`Allman2023.suppressDegreeTwo`](https://github.com/vltanh/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/Networks/BlobDefinitions.lean#L396). [`Allman2023.LabelledGraph.HasQuartetTopology`](https://github.com/vltanh/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/Networks/BlobDefinitions.lean#L437) and [`Quartet.HasFourCycleTopology`](QuartetDistance/Form.lean#L110) are
+  [`Allman2023.suppressDegreeTwo`](https://github.com/formal-phylogenetics/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/Networks/BlobDefinitions.lean#L396). [`Allman2023.LabelledGraph.HasQuartetTopology`](https://github.com/formal-phylogenetics/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/Networks/BlobDefinitions.lean#L437) and [`Quartet.HasFourCycleTopology`](QuartetDistance/Form.lean#L110) are
   the literal tree and the literal 4-cycle.
 * `ρ_xy` (Definition 20), `d_{Q,N⁻}` (Definition 22): [`Quartet.rhoTilde`](QuartetDistance/Class.lean#L38), [`Quartet.sourceDistance`](QuartetDistance/Class.lean#L46).
 
@@ -89,7 +89,7 @@ The bridges, all proved: [`Quartet.hasThreeTwoCycle_iff`](Networks/QuartetNetwor
 
 The representation: [`Networks/QuartetNetwork.lean`](Networks/QuartetNetwork.lean) keeps `LSA(X)`, which Definition 4 suppresses. It is a vertex of
 degree two, which Definition 5 suppresses ([`Quartet.keptDegree_lsa_le`](Networks/QuartetNetwork.lean#L317)). [`Networks/Semidirected.lean`](Networks/Semidirected.lean) reads Definition 5
-on [`Allman2023.semidirected`](https://github.com/vltanh/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/Networks/Definitions.lean#L432), which carries the suppression out, and proves that the readings agree: an edge is kept
+on [`Allman2023.semidirected`](https://github.com/formal-phylogenetics/lean4-allman2023/blob/46efa61d0988df12649089689ae77bc100be034f/Allman2023/Networks/Definitions.lean#L432), which carries the suppression out, and proves that the readings agree: an edge is kept
 exactly when its arc is ([`Quartet.mem_sTrekEdges_iff`](Networks/Semidirected.lean#L534)), the edge merging the two arcs at `LSA(X)` is kept exactly when
 the arc it replaces is ([`Quartet.mem_sTrekEdges_merged_iff`](Networks/Semidirected.lean#L574)), the kept edges are the kept arcs other than that one
 ([`Quartet.image_sTrekEdges`](Networks/Semidirected.lean#L618)), and each vertex of `N⁻` has the same degree in both graphs of kept edges
@@ -118,7 +118,7 @@ in [`Algorithm/Counts.lean`](Algorithm/Counts.lean), with NeighborNet and the Ci
    gives the source's formula, and they are `(1/3, 1/3, 1/3)` at positive branch lengths ([`ThreeTwo.centroid_N₃`](ConcordanceFactors/ThreeTwoCycle.lean#L1024)).
    There the star test rejects with probability tending to `β` only, and the distance does not agree with the
    theoretical one with probability tending to one, for any levels: [`ThreeTwo.not_theorem36AsPrinted_N₃`](ConcordanceFactors/ThreeTwoCycle.lean#L1089). The theorem
-   needs [`Tinnik.NoCentroidCF`](https://github.com/vltanh/lean4-tinnik/blob/de514e1f14522531f16dcdfa12244fe72fe05944/Tinnik/Consistency/Theorem4.lean#L334), which holds off a null set of parameters ([`External.Tinnik.isGenericNull_centroid`](External/Tinnik/Consistency.lean#L41)), and
+   needs [`Tinnik.NoCentroidCF`](https://github.com/formal-phylogenetics/lean4-tinnik/blob/de514e1f14522531f16dcdfa12244fe72fe05944/Tinnik/Consistency/Theorem4.lean#L334), which holds off a null set of parameters ([`External.Tinnik.isGenericNull_centroid`](External/Tinnik/Consistency.lean#L41)), and
    under the condition of the source's Proposition 10 ([`figure5_lt`](Algorithm/Consistency.lean#L1094) on the printed formula; [`ThreeTwo.theorem36_N₃`](ConcordanceFactors/ThreeTwoCycle.lean#L1128) on
    this network).
 
