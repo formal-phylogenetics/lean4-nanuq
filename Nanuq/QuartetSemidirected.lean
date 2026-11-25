@@ -34,7 +34,7 @@ variable {V E X : Type*}
 
 section Defs
 
-variable {V' E' : Type*} (S : SemidirectedNetwork V' E' X)
+variable {V' E' : Type*} (S : AllmanEtAl2023.SemidirectedNetwork V' E' X)
 
 /-- One step of a semidirected path on the edge `e`: along it, or against it if it is undirected. -/
 def SStep (e : E') (u w : V') : Prop :=
@@ -110,7 +110,7 @@ theorem semidirected_source_val_of_eq (k : SemiE hN hX) (h : N.graph.source k.1.
     ((semidirected hN hX).graph.source k).1.1 = N.graph.target (rootTreeArc hN hX).1 := by
   have h' : (lsaPlus hN hX).graph.source k.1 = (lsaPlus hN hX).root := Subtype.ext h
   have key : (semidirected hN hX).graph.source k =
-      ⟨(lsaPlus hN hX).graph.target (rootTreeArc hN hX), AllmanEtAl2023.target_ne_root (lsaPlus_isPhylogenetic hN hX) _⟩ := dite_eq_left h'
+      ⟨(lsaPlus hN hX).graph.target (rootTreeArc hN hX), (lsaPlus_isPhylogenetic hN hX).target_ne_root _⟩ := dite_eq_left h'
   rw [key]
   rfl
 
@@ -219,7 +219,7 @@ theorem IsSPath.lift {u w : SemiV hN hX} {l : List (SemiE hN hX × SemiV hN hX)}
         · right
           refine ⟨?_, congrArg (fun v : SemiV hN hX => v.1.1) h₁, ?_⟩
           · refine isTreeArc_of_lsaPlus hN hX ?_
-            have hge := (lsaPlus_isPhylogenetic hN hX).nonroot_indegree _ (AllmanEtAl2023.target_ne_root (lsaPlus_isPhylogenetic hN hX) k.1)
+            have hge := (lsaPlus_isPhylogenetic hN hX).nonroot_indegree _ ((lsaPlus_isPhylogenetic hN hX).target_ne_root k.1)
             have hnh : ¬ 2 ≤ (lsaPlus hN hX).graph.indegree ((lsaPlus hN hX).graph.target k.1) := h₀
             unfold RootedNetwork.IsTreeArc
             omega
@@ -285,7 +285,7 @@ theorem IsSPath.lift {u w : SemiV hN hX} {l : List (SemiE hN hX × SemiV hN hX)}
           rw [← hsv, h₁]
         · refine Or.inr ⟨?_, congrArg (fun v : SemiV hN hX => v.1.1) h₁, ?_⟩
           · refine isTreeArc_of_lsaPlus hN hX ?_
-            have hge := (lsaPlus_isPhylogenetic hN hX).nonroot_indegree _ (AllmanEtAl2023.target_ne_root (lsaPlus_isPhylogenetic hN hX) k.1)
+            have hge := (lsaPlus_isPhylogenetic hN hX).nonroot_indegree _ ((lsaPlus_isPhylogenetic hN hX).target_ne_root k.1)
             have hnh : ¬ 2 ≤ (lsaPlus hN hX).graph.indegree ((lsaPlus hN hX).graph.target k.1) := h₀
             unfold RootedNetwork.IsTreeArc
             omega
